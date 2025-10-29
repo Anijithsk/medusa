@@ -64,7 +64,7 @@ export function OrderCreateFulfillmentItem({
         locationInventory.available_quantity + reservedQuantityForItem,
       inStockQuantity: locationInventory.stocked_quantity,
     }
-  }, [variant, locationId, itemReservedQuantitiesMap])
+  }, [variant, locationId, itemReservedQuantitiesMap, item.id])
 
   const minValue = 0
   const maxValue = Math.min(

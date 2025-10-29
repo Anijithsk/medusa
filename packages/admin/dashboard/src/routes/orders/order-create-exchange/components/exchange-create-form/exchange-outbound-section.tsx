@@ -103,7 +103,7 @@ export const ExchangeOutboundSection = ({
             (a) => a.exchange_id === exchange.id && a.action === "ITEM_ADD"
           )
       ),
-    [preview.items]
+    [preview.items, exchange.id]
   )
 
   const variantItemMap = useMemo(
@@ -123,7 +123,7 @@ export const ExchangeOutboundSection = ({
 
   const variantOutboundMap = useMemo(
     () => new Map(previewOutboundItems.map((i) => [i.variant_id, i])),
-    [previewOutboundItems, outboundItems]
+    [previewOutboundItems]
   )
 
   useEffect(() => {
@@ -158,7 +158,7 @@ export const ExchangeOutboundSection = ({
         remove(ind)
       }
     })
-  }, [previewOutboundItems])
+  }, [previewOutboundItems, append, remove, update, outboundItems])
 
   const locationId = form.watch("location_id")
   const showOutboundItemsPlaceholder = !outboundItems.length
@@ -207,7 +207,7 @@ export const ExchangeOutboundSection = ({
     } else {
       form.setValue("outbound_option_id", "")
     }
-  }, [preview.shipping_methods])
+  }, [preview.shipping_methods, form])
 
   const onShippingOptionChange = async (
     selectedOptionId: string | undefined
@@ -266,7 +266,7 @@ export const ExchangeOutboundSection = ({
       .every(Boolean)
 
     return !allItemsHaveLocation
-  }, [outboundItems, inventoryMap, locationId])
+  }, [outboundItems, inventoryMap, locationId, variantItemMap])
 
   useEffect(() => {
     const getInventoryMap = async () => {

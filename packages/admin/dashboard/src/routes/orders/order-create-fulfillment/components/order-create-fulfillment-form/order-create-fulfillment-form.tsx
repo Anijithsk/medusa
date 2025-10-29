@@ -174,7 +174,7 @@ export function OrderCreateFulfillmentForm({
         } // else -> TODO: what if original shipping option is deleted?
       }
     }
-  }, [stock_locations?.length, shipping_options?.length])
+  }, [stock_locations?.length, shipping_options?.length, shipping_options, form, order.shipping_methods])
 
   const fulfilledQuantityArray = (order.items || []).map(
     (item) =>
@@ -210,7 +210,7 @@ export function OrderCreateFulfillmentForm({
     )
 
     form.setValue("quantity", quantityMap)
-  }, [...fulfilledQuantityArray, requiresShipping])
+  }, [fulfilledQuantityArray, requiresShipping, form, order?.items, t])
 
   const differentOptionSelected =
     shippingOptionId &&

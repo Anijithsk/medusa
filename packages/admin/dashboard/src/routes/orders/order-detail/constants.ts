@@ -19,12 +19,13 @@ const DEFAULT_PROPERTIES = [
   "tax_total",
   "refundable_total",
   "order_change",
-]
+];
 
 const DEFAULT_RELATIONS = [
   "*customer",
   "*items", // -> we get LineItem here with added `quantity` and `detail` which is actually an OrderItem (which is a parent object to LineItem in the DB)
   "*items.variant",
+  "*items.variant.preorder_variant",
   "*items.variant.product",
   "*items.variant.options",
   "+items.variant.manage_inventory",
@@ -46,8 +47,6 @@ const DEFAULT_RELATIONS = [
   "*payment_collections.payments.refunds",
   "*payment_collections.payments.refunds.refund_reason",
   "region.automatic_taxes",
-]
+];
 
-export const DEFAULT_FIELDS = `${DEFAULT_PROPERTIES.join(
-  ","
-)},${DEFAULT_RELATIONS.join(",")}`
+export const DEFAULT_FIELDS = `${DEFAULT_PROPERTIES.join(",")},${DEFAULT_RELATIONS.join(",")}`;

@@ -1,26 +1,26 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Heading, Input, Text, toast } from "@medusajs/ui"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import * as zod from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, Heading, Input, Text, toast } from "@medusajs/ui";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import * as zod from "zod";
 
-import { Form } from "../../../../../components/common/form"
-import { HandleInput } from "../../../../../components/inputs/handle-input"
-import {
-  RouteFocusModal,
-  useRouteModal,
-} from "../../../../../components/modals"
-import { KeyboundForm } from "../../../../../components/utilities/keybound-form"
-import { useCreateCollection } from "../../../../../hooks/api/collections"
+import { Form } from "../../../../../components/common/form";
+import { HandleInput } from "../../../../../components/inputs/handle-input";
+import { RouteFocusModal, useRouteModal } from "../../../../../components/modals";
+import { KeyboundForm } from "../../../../../components/utilities/keybound-form";
+import { useCreateCollection } from "../../../../../hooks/api/collections";
 
 const CreateCollectionSchema = zod.object({
-  title: zod.string().min(1),
-  handle: zod.string().optional(),
-})
+  title: zod
+    .string({ required_error: "Title is required" })
+    .min(1, { message: "Title must contain at least 1 character(s)" })
+    .max(50, { message: "Title must not exceed 50 characters" }),
+  handle: zod.string().max(50, { message: "Handle must not exceed 50 characters" }).optional(),
+});
 
 export const CreateCollectionForm = () => {
-  const { t } = useTranslation()
-  const { handleSuccess } = useRouteModal()
+  const { t } = useTranslation();
+  const { handleSuccess } = useRouteModal();
 
   const form = useForm<zod.infer<typeof CreateCollectionSchema>>({
     defaultValues: {
@@ -28,21 +28,21 @@ export const CreateCollectionForm = () => {
       handle: "",
     },
     resolver: zodResolver(CreateCollectionSchema),
-  })
+  });
 
-  const { mutateAsync, isPending } = useCreateCollection()
+  const { mutateAsync, isPending } = useCreateCollection();
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async data => {
     await mutateAsync(data, {
       onSuccess: ({ collection }) => {
-        handleSuccess(`/collections/${collection.id}`)
-        toast.success(t("collections.createSuccess"))
+        handleSuccess(`/collections/${collection.id}`);
+        toast.success(t("collections.createSuccess"));
       },
-      onError: (error) => {
-        toast.error(error.message)
+      onError: error => {
+        toast.error(error.message);
       },
-    })
-  })
+    });
+  });
 
   return (
     <RouteFocusModal.Form form={form}>
@@ -54,12 +54,7 @@ export const CreateCollectionForm = () => {
                 {t("actions.cancel")}
               </Button>
             </RouteFocusModal.Close>
-            <Button
-              size="small"
-              variant="primary"
-              type="submit"
-              isLoading={isPending}
-            >
+            <Button size="small" variant="primary" type="submit" isLoading={isPending}>
               {t("actions.create")}
             </Button>
           </div>
@@ -79,13 +74,13 @@ export const CreateCollectionForm = () => {
                 render={({ field }) => {
                   return (
                     <Form.Item>
-                      <Form.Label>{t("fields.title")}</Form.Label>
+                      <Form.Label>{t("fields.title")}*</Form.Label>
                       <Form.Control>
                         <Input autoComplete="off" {...field} />
                       </Form.Control>
                       <Form.ErrorMessage />
                     </Form.Item>
-                  )
+                  );
                 }}
               />
               <Form.Field
@@ -94,10 +89,7 @@ export const CreateCollectionForm = () => {
                 render={({ field }) => {
                   return (
                     <Form.Item>
-                      <Form.Label
-                        optional
-                        tooltip={t("collections.handleTooltip")}
-                      >
+                      <Form.Label optional tooltip={t("collections.handleTooltip")}>
                         {t("fields.handle")}
                       </Form.Label>
                       <Form.Control>
@@ -105,7 +97,7 @@ export const CreateCollectionForm = () => {
                       </Form.Control>
                       <Form.ErrorMessage />
                     </Form.Item>
-                  )
+                  );
                 }}
               />
             </div>
@@ -113,5 +105,5 @@ export const CreateCollectionForm = () => {
         </RouteFocusModal.Body>
       </KeyboundForm>
     </RouteFocusModal.Form>
-  )
-}
+  );
+};

@@ -81,7 +81,7 @@ export const ReturnCreateForm = ({
       preview.items.filter(
         (i) => !!i.actions?.find((a) => a.return_id === activeReturn.id)
       ),
-    [preview.items]
+    [preview.items, activeReturn.id]
   )
 
   const previewItemsMap = useMemo(
@@ -233,7 +233,7 @@ export const ReturnCreateForm = ({
         remove(ind)
       }
     })
-  }, [previewItems])
+  }, [previewItems, append, remove, update, items])
 
   useEffect(() => {
     const method = preview.shipping_methods?.find(
@@ -245,7 +245,7 @@ export const ReturnCreateForm = ({
     } else {
       form.setValue("option_id", "")
     }
-  }, [preview.shipping_methods])
+  }, [preview.shipping_methods, form])
 
   const showPlaceholder = !items.length
   const locationId = form.watch("location_id")
@@ -315,7 +315,7 @@ export const ReturnCreateForm = ({
 
   useEffect(() => {
     form.setValue("location_id", activeReturn?.location_id || "")
-  }, [activeReturn])
+  }, [activeReturn, form])
 
   const showLevelsWarning = useMemo(() => {
     if (!locationId) {
@@ -340,7 +340,7 @@ export const ReturnCreateForm = ({
       .every(Boolean)
 
     return !allItemsHaveLocation
-  }, [items, inventoryMap, locationId])
+  }, [items, inventoryMap, locationId, itemsMap])
 
   useEffect(() => {
     const getInventoryMap = async () => {
@@ -384,7 +384,7 @@ export const ReturnCreateForm = ({
     getInventoryMap().then((map) => {
       setInventoryMap(map)
     })
-  }, [items])
+  }, [items, itemsMap])
 
   const returnTotal = preview.return_requested_total
 

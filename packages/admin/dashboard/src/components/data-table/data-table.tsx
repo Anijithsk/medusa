@@ -14,72 +14,72 @@ import {
   DataTable as Primitive,
   Text,
   useDataTable,
-} from "@medusajs/ui"
-import React, { ReactNode, useCallback, useMemo } from "react"
-import { useTranslation } from "react-i18next"
-import { Link, useNavigate, useSearchParams } from "react-router-dom"
+} from "@medusajs/ui";
+import React, { ReactNode, useCallback, useMemo, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { useQueryParams } from "../../hooks/use-query-params"
-import { ActionMenu } from "../common/action-menu"
+import { useQueryParams } from "../../hooks/use-query-params";
+import { ActionMenu } from "../common/action-menu";
 
 type DataTableActionProps = {
-  label: string
-  disabled?: boolean
+  label: string;
+  disabled?: boolean;
 } & (
   | {
-      to: string
+      to: string;
     }
   | {
-      onClick: () => void
+      onClick: () => void;
     }
-)
+);
 
 type DataTableActionMenuActionProps = {
-  label: string
-  icon: ReactNode
-  disabled?: boolean
+  label: string;
+  icon: ReactNode;
+  disabled?: boolean;
 } & (
   | {
-      to: string
+      to: string;
     }
   | {
-      onClick: () => void
+      onClick: () => void;
     }
-)
+);
 
 type DataTableActionMenuGroupProps = {
-  actions: DataTableActionMenuActionProps[]
-}
+  actions: DataTableActionMenuActionProps[];
+};
 
 type DataTableActionMenuProps = {
-  groups: DataTableActionMenuGroupProps[]
-}
+  groups: DataTableActionMenuGroupProps[];
+};
 
 interface DataTableProps<TData> {
-  data?: TData[]
-  columns: DataTableColumnDef<TData, any>[]
-  filters?: DataTableFilter[]
-  commands?: DataTableCommand[]
-  action?: DataTableActionProps
-  actionMenu?: DataTableActionMenuProps
-  rowCount?: number
-  getRowId: (row: TData) => string
-  enablePagination?: boolean
-  enableSearch?: boolean
-  autoFocusSearch?: boolean
-  rowHref?: (row: TData) => string
-  emptyState?: DataTableEmptyStateProps
-  heading?: string
-  subHeading?: string
-  prefix?: string
-  pageSize?: number
-  isLoading?: boolean
+  data?: TData[];
+  columns: DataTableColumnDef<TData, any>[];
+  filters?: DataTableFilter[];
+  commands?: DataTableCommand[];
+  action?: DataTableActionProps;
+  actionMenu?: DataTableActionMenuProps;
+  rowCount?: number;
+  getRowId: (row: TData) => string;
+  enablePagination?: boolean;
+  enableSearch?: boolean;
+  autoFocusSearch?: boolean;
+  rowHref?: (row: TData) => string;
+  emptyState?: DataTableEmptyStateProps;
+  heading?: string;
+  subHeading?: string;
+  prefix?: string;
+  pageSize?: number;
+  isLoading?: boolean;
   rowSelection?: {
-    state: DataTableRowSelectionState
-    onRowSelectionChange: (value: DataTableRowSelectionState) => void
-    enableRowSelection?: boolean | ((row: DataTableRow<TData>) => boolean)
-  }
-  layout?: "fill" | "auto"
+    state: DataTableRowSelectionState;
+    onRowSelectionChange: (value: DataTableRowSelectionState) => void;
+    enableRowSelection?: boolean | ((row: DataTableRow<TData>) => boolean);
+  };
+  layout?: "fill" | "auto";
 }
 
 export const DataTable = <TData,>({
@@ -104,14 +104,14 @@ export const DataTable = <TData,>({
   isLoading = false,
   layout = "auto",
 }: DataTableProps<TData>) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const enableFiltering = filters && filters.length > 0
-  const enableCommands = commands && commands.length > 0
-  const enableSorting = columns.some((column) => column.enableSorting)
+  const enableFiltering = filters && filters.length > 0;
+  const enableCommands = commands && commands.length > 0;
+  const enableSorting = columns.some(column => column.enableSorting);
 
-  const filterIds = useMemo(() => filters?.map((f) => f.id) ?? [], [filters])
-  const prefixedFilterIds = filterIds.map((id) => getQueryParamKey(id, prefix))
+  const filterIds = useMemo(() => filters?.map(f => f.id) ?? [], [filters]);
+  const prefixedFilterIds = filterIds.map(id => getQueryParamKey(id, prefix));
 
   const { offset, order, q, ...filterParams } = useQueryParams(
     [
@@ -121,116 +121,121 @@ export const DataTable = <TData,>({
       ...(enablePagination ? ["offset"] : []),
     ],
     prefix
-  )
-  const [_, setSearchParams] = useSearchParams()
+  );
+  const [_, setSearchParams] = useSearchParams();
+  const defaultOrder = "-updated_at";
+
+  const didRunRef = useRef(false);
+  useEffect(() => {
+    if (didRunRef.current) return;
+    didRunRef.current = true;
+    if (!order) {
+      setSearchParams(prev => {
+        prev.set(getQueryParamKey("order", prefix), defaultOrder);
+        return prev;
+      });
+    }
+  }, [order, prefix, setSearchParams]);
 
   const search = useMemo(() => {
-    return q ?? ""
-  }, [q])
+    return q ?? "";
+  }, [q]);
 
   const handleSearchChange = (value: string) => {
-    setSearchParams((prev) => {
+    setSearchParams(prev => {
       if (value) {
-        prev.set(getQueryParamKey("q", prefix), value)
+        prev.set(getQueryParamKey("q", prefix), value);
       } else {
-        prev.delete(getQueryParamKey("q", prefix))
+        prev.delete(getQueryParamKey("q", prefix));
       }
 
-      return prev
-    })
-  }
+      return prev;
+    });
+  };
 
   const pagination: DataTablePaginationState = useMemo(() => {
-    return offset
-      ? parsePaginationState(offset, pageSize)
-      : { pageIndex: 0, pageSize }
-  }, [offset, pageSize])
+    return offset ? parsePaginationState(offset, pageSize) : { pageIndex: 0, pageSize };
+  }, [offset, pageSize]);
 
   const handlePaginationChange = (value: DataTablePaginationState) => {
-    setSearchParams((prev) => {
+    setSearchParams(prev => {
       if (value.pageIndex === 0) {
-        prev.delete(getQueryParamKey("offset", prefix))
+        prev.delete(getQueryParamKey("offset", prefix));
       } else {
-        prev.set(
-          getQueryParamKey("offset", prefix),
-          transformPaginationState(value).toString()
-        )
+        prev.set(getQueryParamKey("offset", prefix), transformPaginationState(value).toString());
       }
-      return prev
-    })
-  }
+      return prev;
+    });
+  };
 
   const filtering: DataTableFilteringState = useMemo(
     () => parseFilterState(filterIds, filterParams),
     [filterIds, filterParams]
-  )
+  );
 
   const handleFilteringChange = (value: DataTableFilteringState) => {
-    setSearchParams((prev) => {
-      Array.from(prev.keys()).forEach((key) => {
+    setSearchParams(prev => {
+      Array.from(prev.keys()).forEach(key => {
         if (prefixedFilterIds.includes(key) && !(key in value)) {
-          prev.delete(key)
+          prev.delete(key);
         }
-      })
+      });
 
       Object.entries(value).forEach(([key, filter]) => {
-        if (
-          prefixedFilterIds.includes(getQueryParamKey(key, prefix)) &&
-          filter
-        ) {
-          prev.set(getQueryParamKey(key, prefix), JSON.stringify(filter))
+        if (prefixedFilterIds.includes(getQueryParamKey(key, prefix)) && filter) {
+          prev.set(getQueryParamKey(key, prefix), JSON.stringify(filter));
         }
-      })
+      });
 
-      return prev
-    })
-  }
+      return prev;
+    });
+  };
 
   const sorting: DataTableSortingState | null = useMemo(() => {
-    return order ? parseSortingState(order) : null
-  }, [order])
+    return order ? parseSortingState(order) : null;
+  }, [order]);
 
   const handleSortingChange = (value: DataTableSortingState) => {
-    setSearchParams((prev) => {
+    setSearchParams(prev => {
       if (value) {
-        const valueToStore = transformSortingState(value)
+        const valueToStore = transformSortingState(value);
 
-        prev.set(getQueryParamKey("order", prefix), valueToStore)
+        prev.set(getQueryParamKey("order", prefix), valueToStore);
       } else {
-        prev.delete(getQueryParamKey("order", prefix))
+        prev.delete(getQueryParamKey("order", prefix));
       }
 
-      return prev
-    })
-  }
+      return prev;
+    });
+  };
 
   const { pagination: paginationTranslations, toolbar: toolbarTranslations } =
-    useDataTableTranslations()
+    useDataTableTranslations();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onRowClick = useCallback(
     (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>, row: TData) => {
       if (!rowHref) {
-        return
+        return;
       }
 
-      const href = rowHref(row)
+      const href = rowHref(row);
 
       if (event.metaKey || event.ctrlKey || event.button === 1) {
-        window.open(href, "_blank", "noreferrer")
-        return
+        window.open(href, "_blank", "noreferrer");
+        return;
       }
 
       if (event.shiftKey) {
-        window.open(href, undefined, "noreferrer")
-        return
+        window.open(href, undefined, "noreferrer");
+        return;
       }
 
-      navigate(href)
+      navigate(href);
     },
     [navigate, rowHref]
-  )
+  );
 
   const instance = useDataTable({
     data,
@@ -266,9 +271,9 @@ export const DataTable = <TData,>({
       : undefined,
     rowSelection,
     isLoading,
-  })
+  });
 
-  const shouldRenderHeading = heading || subHeading
+  const shouldRenderHeading = heading || subHeading;
 
   return (
     <Primitive
@@ -293,9 +298,7 @@ export const DataTable = <TData,>({
             </div>
           )}
           <div className="flex items-center justify-end gap-x-2 md:hidden">
-            {enableFiltering && (
-              <Primitive.FilterMenu tooltip={t("filters.filterLabel")} />
-            )}
+            {enableFiltering && <Primitive.FilterMenu tooltip={t("filters.filterLabel")} />}
             <Primitive.SortingMenu tooltip={t("filters.sortLabel")} />
             {actionMenu && <ActionMenu variant="primary" {...actionMenu} />}
             {action && <DataTableAction {...action} />}
@@ -311,9 +314,7 @@ export const DataTable = <TData,>({
             </div>
           )}
           <div className="hidden items-center gap-x-2 md:flex">
-            {enableFiltering && (
-              <Primitive.FilterMenu tooltip={t("filters.filterLabel")} />
-            )}
+            {enableFiltering && <Primitive.FilterMenu tooltip={t("filters.filterLabel")} />}
             <Primitive.SortingMenu tooltip={t("filters.sortLabel")} />
             {actionMenu && <ActionMenu variant="primary" {...actionMenu} />}
             {action && <DataTableAction {...action} />}
@@ -321,66 +322,57 @@ export const DataTable = <TData,>({
         </div>
       </Primitive.Toolbar>
       <Primitive.Table emptyState={emptyState} />
-      {enablePagination && (
-        <Primitive.Pagination translations={paginationTranslations} />
-      )}
-      {enableCommands && (
-        <Primitive.CommandBar selectedLabel={(count) => `${count} selected`} />
-      )}
+      {enablePagination && <Primitive.Pagination translations={paginationTranslations} />}
+      {enableCommands && <Primitive.CommandBar selectedLabel={count => `${count} selected`} />}
     </Primitive>
-  )
-}
+  );
+};
 
 function transformSortingState(value: DataTableSortingState) {
-  return value.desc ? `-${value.id}` : value.id
+  return value.desc ? `-${value.id}` : value.id;
 }
 
 function parseSortingState(value: string) {
-  return value.startsWith("-")
-    ? { id: value.slice(1), desc: true }
-    : { id: value, desc: false }
+  return value.startsWith("-") ? { id: value.slice(1), desc: true } : { id: value, desc: false };
 }
 
 function transformPaginationState(value: DataTablePaginationState) {
-  return value.pageIndex * value.pageSize
+  return value.pageIndex * value.pageSize;
 }
 
 function parsePaginationState(value: string, pageSize: number) {
-  const offset = parseInt(value)
+  const offset = parseInt(value);
 
   return {
     pageIndex: Math.floor(offset / pageSize),
     pageSize,
-  }
+  };
 }
 
-function parseFilterState(
-  filterIds: string[],
-  value: Record<string, string | undefined>
-) {
+function parseFilterState(filterIds: string[], value: Record<string, string | undefined>) {
   if (!value) {
-    return {}
+    return {};
   }
 
-  const filters: DataTableFilteringState = {}
+  const filters: DataTableFilteringState = {};
 
   for (const id of filterIds) {
-    const filterValue = value[id]
+    const filterValue = value[id];
 
     if (filterValue) {
-      filters[id] = JSON.parse(filterValue)
+      filters[id] = JSON.parse(filterValue);
     }
   }
 
-  return filters
+  return filters;
 }
 
 function getQueryParamKey(key: string, prefix?: string) {
-  return prefix ? `${prefix}_${key}` : key
+  return prefix ? `${prefix}_${key}` : key;
 }
 
 const useDataTableTranslations = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const paginationTranslations = {
     of: t("general.of"),
@@ -388,41 +380,37 @@ const useDataTableTranslations = () => {
     pages: t("general.pages"),
     prev: t("general.prev"),
     next: t("general.next"),
-  }
+  };
 
   const toolbarTranslations = {
     clearAll: t("actions.clearAll"),
-  }
+  };
 
   return {
     pagination: paginationTranslations,
     toolbar: toolbarTranslations,
-  }
-}
+  };
+};
 
-const DataTableAction = ({
-  label,
-  disabled,
-  ...props
-}: DataTableActionProps) => {
+const DataTableAction = ({ label, disabled, ...props }: DataTableActionProps) => {
   const buttonProps = {
     size: "small" as const,
     disabled: disabled ?? false,
     type: "button" as const,
     variant: "secondary" as const,
-  }
+  };
 
   if ("to" in props) {
     return (
       <Button {...buttonProps} asChild>
         <Link to={props.to}>{label}</Link>
       </Button>
-    )
+    );
   }
 
   return (
     <Button {...buttonProps} onClick={props.onClick}>
       {label}
     </Button>
-  )
-}
+  );
+};

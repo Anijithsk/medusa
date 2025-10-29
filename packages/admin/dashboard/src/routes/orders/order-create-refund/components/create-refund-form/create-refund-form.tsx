@@ -73,7 +73,7 @@ export const CreateRefundForm = ({
       pendingAmount < 0 ? pendingAmount * -1 : pendingAmount
 
     form.setValue("amount", normalizedAmount as number)
-  }, [payment])
+  }, [payment, form, order.summary.pending_difference])
 
   const { mutateAsync, isPending } = useRefundPayment(order.id, payment?.id!)
 

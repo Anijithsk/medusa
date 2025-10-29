@@ -47,7 +47,7 @@ export const ManageLocationsForm = ({
 }: EditInventoryItemAttributeFormProps) => {
   const existingLocationLevels = useMemo(
     () => new Set(item.location_levels?.map((l) => l.location_id) ?? []),
-    item.location_levels
+    [item.location_levels]
   )
 
   const { t } = useTranslation()
@@ -68,7 +68,7 @@ export const ManageLocationsForm = ({
       "locations",
       getDefaultValues(locations, existingLocationLevels).locations
     )
-  }, [existingLocationLevels, locations])
+  }, [existingLocationLevels, locations, form])
 
   const { mutateAsync } = useBatchInventoryItemLocationLevels(item.id)
 

@@ -1,40 +1,42 @@
-import { Button, Input, Select, Text, Textarea, toast } from "@medusajs/ui"
-import { useTranslation } from "react-i18next"
-import * as zod from "zod"
+import { Button, Input, Select, Text, Textarea, toast } from "@medusajs/ui";
+import { useTranslation } from "react-i18next";
+import * as zod from "zod";
 
-import { HttpTypes } from "@medusajs/types"
-import { Form } from "../../../../../components/common/form"
-import { SwitchBox } from "../../../../../components/common/switch-box"
-import { RouteDrawer, useRouteModal } from "../../../../../components/modals"
-import { useExtendableForm } from "../../../../../dashboard-app/forms/hooks"
-import { useUpdateProduct } from "../../../../../hooks/api/products"
-import { transformNullableFormData } from "../../../../../lib/form-helpers"
+import { HttpTypes } from "@medusajs/types";
+import { Form } from "../../../../../components/common/form";
+import { SwitchBox } from "../../../../../components/common/switch-box";
+import { RouteDrawer, useRouteModal } from "../../../../../components/modals";
+import { useExtendableForm } from "../../../../../dashboard-app/forms/hooks";
+import { useUpdateProduct } from "../../../../../hooks/api/products";
+import { transformNullableFormData } from "../../../../../lib/form-helpers";
 
-import { KeyboundForm } from "../../../../../components/utilities/keybound-form"
-import { FormExtensionZone } from "../../../../../dashboard-app"
-import { useExtension } from "../../../../../providers/extension-provider"
+import { KeyboundForm } from "../../../../../components/utilities/keybound-form";
+import { FormExtensionZone } from "../../../../../dashboard-app";
+import { useExtension } from "../../../../../providers/extension-provider";
+import { usePermission } from "../../../../../hooks/use-permission";
+import { getUpdatedFields } from "../../../../../utils/get-updated-fields";
 
 type EditProductFormProps = {
-  product: HttpTypes.AdminProduct
-}
+  product: HttpTypes.AdminProduct;
+};
 
 const EditProductSchema = zod.object({
   status: zod.enum(["draft", "published", "proposed", "rejected"]),
-  title: zod.string().min(1),
+  title: zod.string().min(1, "Title is required"),
   subtitle: zod.string().optional(),
-  handle: zod.string().min(1),
+  handle: zod.string().min(1, "Handle is required"),
   material: zod.string().optional(),
   description: zod.string().optional(),
   discountable: zod.boolean(),
-})
+});
 
 export const EditProductForm = ({ product }: EditProductFormProps) => {
-  const { t } = useTranslation()
-  const { handleSuccess } = useRouteModal()
+  const { t } = useTranslation();
+  const { handleSuccess } = useRouteModal();
 
-  const { getFormFields, getFormConfigs } = useExtension()
-  const fields = getFormFields("product", "edit")
-  const configs = getFormConfigs("product", "edit")
+  const { getFormFields, getFormConfigs } = useExtension();
+  const fields = getFormFields("product", "edit");
+  const configs = getFormConfigs("product", "edit");
 
   const form = useExtendableForm({
     defaultValues: {
@@ -49,14 +51,18 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
     schema: EditProductSchema,
     configs: configs,
     data: product,
-  })
+  });
 
-  const { mutateAsync, isPending } = useUpdateProduct(product.id)
+  const { mutateAsync, isPending } = useUpdateProduct(product.id);
 
-  const handleSubmit = form.handleSubmit(async (data) => {
-    const { title, discountable, handle, status, ...optional } = data
+  const handleSubmit = form.handleSubmit(async data => {
+    const { title, discountable, handle, status, ...optional } = data;
 
-    const nullableData = transformNullableFormData(optional)
+    const nullableData = transformNullableFormData(optional);
+
+    const changedFields = getUpdatedFields(product, data);
+    const { additional_data, ...rest } = changedFields;
+    const changedValues = { ...rest };
 
     await mutateAsync(
       {
@@ -65,27 +71,25 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
         handle,
         status: status as HttpTypes.AdminProductStatus,
         ...nullableData,
-      },
+        additional_data: { changedValues: { ...changedValues } },
+      } as any,
       {
         onSuccess: ({ product }) => {
-          toast.success(
-            t("products.edit.successToast", { title: product.title })
-          )
-          handleSuccess()
+          toast.success(t("products.edit.successToast", { title: product.title }));
+          handleSuccess();
         },
-        onError: (e) => {
-          toast.error(e.message)
+        onError: e => {
+          toast.error(e.message);
         },
       }
-    )
-  })
+    );
+  });
+
+  const { hasPermission } = usePermission();
 
   return (
     <RouteDrawer.Form form={form}>
-      <KeyboundForm
-        onSubmit={handleSubmit}
-        className="flex flex-1 flex-col overflow-hidden"
-      >
+      <KeyboundForm onSubmit={handleSubmit} className="flex flex-1 flex-col overflow-hidden">
         <RouteDrawer.Body className="flex flex-1 flex-col gap-y-8 overflow-y-auto">
           <div className="flex flex-col gap-y-8">
             <div className="flex flex-col gap-y-4">
@@ -102,26 +106,21 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
                             <Select.Value />
                           </Select.Trigger>
                           <Select.Content>
-                            {(
-                              [
-                                "draft",
-                                "published",
-                                "proposed",
-                                "rejected",
-                              ] as const
-                            ).map((status) => {
-                              return (
-                                <Select.Item key={status} value={status}>
-                                  {t(`products.productStatus.${status}`)}
-                                </Select.Item>
-                              )
-                            })}
+                            {(["draft", "published", "proposed", "rejected"] as const).map(
+                              status => {
+                                return (
+                                  <Select.Item key={status} value={status}>
+                                    {t(`products.productStatus.${status}`)}
+                                  </Select.Item>
+                                );
+                              }
+                            )}
                           </Select.Content>
                         </Select>
                       </Form.Control>
                       <Form.ErrorMessage />
                     </Form.Item>
-                  )
+                  );
                 }}
               />
               <Form.Field
@@ -136,7 +135,7 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
                       </Form.Control>
                       <Form.ErrorMessage />
                     </Form.Item>
-                  )
+                  );
                 }}
               />
               <Form.Field
@@ -151,7 +150,7 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
                       </Form.Control>
                       <Form.ErrorMessage />
                     </Form.Item>
-                  )
+                  );
                 }}
               />
               <Form.Field
@@ -160,7 +159,9 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
                 render={({ field }) => {
                   return (
                     <Form.Item>
-                      <Form.Label>{t("fields.handle")}</Form.Label>
+                      <Form.Label tooltip={t("products.fields.handle.tooltip")}>
+                        {t("fields.handle")}
+                      </Form.Label>
                       <Form.Control>
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 z-10 flex w-8 items-center justify-center border-r">
@@ -178,7 +179,7 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
                       </Form.Control>
                       <Form.ErrorMessage />
                     </Form.Item>
-                  )
+                  );
                 }}
               />
               <Form.Field
@@ -193,7 +194,7 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
                       </Form.Control>
                       <Form.ErrorMessage />
                     </Form.Item>
-                  )
+                  );
                 }}
               />
               <Form.Field
@@ -202,15 +203,13 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
                 render={({ field }) => {
                   return (
                     <Form.Item>
-                      <Form.Label optional>
-                        {t("fields.description")}
-                      </Form.Label>
+                      <Form.Label optional>{t("fields.description")}</Form.Label>
                       <Form.Control>
                         <Textarea {...field} />
                       </Form.Control>
                       <Form.ErrorMessage />
                     </Form.Item>
-                  )
+                  );
                 }}
               />
             </div>
@@ -230,12 +229,17 @@ export const EditProductForm = ({ product }: EditProductFormProps) => {
                 {t("actions.cancel")}
               </Button>
             </RouteDrawer.Close>
-            <Button size="small" type="submit" isLoading={isPending}>
+            <Button
+              size="small"
+              type="submit"
+              isLoading={isPending}
+              disabled={!hasPermission("/admin/products", "POST")}
+            >
               {t("actions.save")}
             </Button>
           </div>
         </RouteDrawer.Footer>
       </KeyboundForm>
     </RouteDrawer.Form>
-  )
-}
+  );
+};
