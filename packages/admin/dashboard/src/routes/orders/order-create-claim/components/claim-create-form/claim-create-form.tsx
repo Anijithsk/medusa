@@ -168,7 +168,7 @@ export const ClaimCreateForm = ({
       preview?.items?.filter(
         (i) => !!i.actions?.find((a) => a.claim_id === claim.id)
       ),
-    [preview.items]
+    [preview.items, claim.id]
   )
 
   const inboundPreviewItems = previewItems.filter(
@@ -301,7 +301,7 @@ export const ClaimCreateForm = ({
 
   const previewItemsMap = useMemo(
     () => new Map(previewItems.map((i) => [i.id, i])),
-    [previewItems, inboundItems]
+    [previewItems]
   )
 
   useEffect(() => {
@@ -338,7 +338,7 @@ export const ClaimCreateForm = ({
         remove(ind)
       }
     })
-  }, [previewItems])
+  }, [previewItems, append, inboundItems, inboundPreviewItems, remove, update])
 
   useEffect(() => {
     const inboundShipping = preview.shipping_methods.find(
@@ -362,11 +362,11 @@ export const ClaimCreateForm = ({
     } else {
       form.setValue("outbound_option_id", null)
     }
-  }, [preview.shipping_methods])
+  }, [preview.shipping_methods, form])
 
   useEffect(() => {
     form.setValue("location_id", orderReturn?.location_id)
-  }, [orderReturn])
+  }, [orderReturn, form])
 
   const showInboundItemsPlaceholder = !inboundPreviewItems.length
   const showOutboundItemsPlaceholder = !outboundPreviewItems.length
@@ -513,7 +513,7 @@ export const ClaimCreateForm = ({
       .every(Boolean)
 
     return !allItemsHaveLocation
-  }, [inboundItems, inventoryMap, locationId])
+  }, [inboundItems, inventoryMap, locationId, itemsMap])
 
   useEffect(() => {
     const getInventoryMap = async () => {
@@ -566,7 +566,7 @@ export const ClaimCreateForm = ({
         IS_CANCELING = false
       }
     }
-  }, [])
+  }, [cancelClaimRequest, t])
 
   const inboundShippingTotal = useMemo(() => {
     const method = preview.shipping_methods.find(

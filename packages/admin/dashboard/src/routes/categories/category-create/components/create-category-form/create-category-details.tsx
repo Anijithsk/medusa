@@ -1,6 +1,6 @@
-import { Heading, Input, Select, Text, Textarea } from "@medusajs/ui"
-import { UseFormReturn } from "react-hook-form"
-import { useTranslation } from "react-i18next"
+import { Heading, Input, Select, Text, Textarea } from "@medusajs/ui";
+import { UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { Form } from "../../../../../components/common/form"
 import { HandleInput } from "../../../../../components/inputs/handle-input"
@@ -8,8 +8,8 @@ import { useDocumentDirection } from "../../../../../hooks/use-document-directio
 import { CreateCategorySchema } from "./schema"
 
 type CreateCategoryDetailsProps = {
-  form: UseFormReturn<CreateCategorySchema>
-}
+  form: UseFormReturn<CreateCategorySchema>;
+};
 
 export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
   const { t } = useTranslation()
@@ -30,13 +30,13 @@ export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
             render={({ field }) => {
               return (
                 <Form.Item>
-                  <Form.Label>{t("fields.title")}</Form.Label>
+                  <Form.Label>{t("fields.title")}*</Form.Label>
                   <Form.Control>
-                    <Input autoComplete="off" {...field} />
+                    <Input autoComplete="off" {...field} placeholder="Enter the Title" />
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
           <Form.Field
@@ -49,11 +49,11 @@ export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
                     {t("fields.handle")}
                   </Form.Label>
                   <Form.Control>
-                    <HandleInput {...field} />
+                    <HandleInput {...field} placeholder="Enter the Handle" />
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
         </div>
@@ -65,11 +65,11 @@ export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
               <Form.Item>
                 <Form.Label optional>{t("fields.description")}</Form.Label>
                 <Form.Control>
-                  <Textarea {...field} />
+                  <Textarea {...field} placeholder="Enter the Description" />
                 </Form.Control>
                 <Form.ErrorMessage />
               </Form.Item>
-            )
+            );
           }}
         />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -101,7 +101,7 @@ export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
           <Form.Field
@@ -110,9 +110,7 @@ export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
             render={({ field: { ref, onChange, ...field } }) => {
               return (
                 <Form.Item>
-                  <Form.Label>
-                    {t("categories.fields.visibility.label")}
-                  </Form.Label>
+                  <Form.Label>{t("categories.fields.visibility.label")}</Form.Label>
                   <Form.Control>
                     <Select
                       dir={direction}
@@ -134,11 +132,11 @@ export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -7,10 +7,10 @@ import {
   Select,
   Text,
   Textarea,
-} from "@medusajs/ui"
-import { useEffect } from "react"
-import { useWatch } from "react-hook-form"
-import { useTranslation } from "react-i18next"
+} from "@medusajs/ui";
+import { useEffect } from "react";
+import { useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { Form } from "../../../../../components/common/form"
 import { useStore } from "../../../../../hooks/api/store"
@@ -28,24 +28,24 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
   const watchValueType = useWatch({
     control: form.control,
     name: `${fieldScope}budget.type`,
-  })
+  });
 
-  const isTypeSpend = watchValueType === "spend"
+  const isTypeSpend = watchValueType === "spend";
 
   const currencyValue = useWatch({
     control: form.control,
     name: `${fieldScope}budget.currency_code`,
-  })
+  });
 
   const promotionCurrencyValue = useWatch({
     control: form.control,
     name: `application_method.currency_code`,
-  })
+  });
 
-  const currency = currencyValue || promotionCurrencyValue
+  const currency = currencyValue || promotionCurrencyValue;
 
   useEffect(() => {
-    form.setValue(`${fieldScope}budget.limit`, null)
+    form.setValue(`${fieldScope}budget.limit`, null);
 
     if (isTypeSpend) {
       form.setValue(`campaign.budget.currency_code`, promotionCurrencyValue)
@@ -55,14 +55,11 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
   }, [promotionCurrencyValue, isTypeSpend])
 
   if (promotionCurrencyValue) {
-    const formCampaignBudget = form.getValues().campaign?.budget
-    const formCampaignCurrency = formCampaignBudget?.currency_code
+    const formCampaignBudget = form.getValues().campaign?.budget;
+    const formCampaignCurrency = formCampaignBudget?.currency_code;
 
-    if (
-      formCampaignBudget?.type === "spend" &&
-      formCampaignCurrency !== promotionCurrencyValue
-    ) {
-      form.setValue("campaign.budget.currency_code", promotionCurrencyValue)
+    if (formCampaignBudget?.type === "spend" && formCampaignCurrency !== promotionCurrencyValue) {
+      form.setValue("campaign.budget.currency_code", promotionCurrencyValue);
     }
   }
 
@@ -84,7 +81,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
             render={({ field }) => {
               return (
                 <Form.Item>
-                  <Form.Label>{t("fields.name")}</Form.Label>
+                  <Form.Label>{t("fields.name")}*</Form.Label>
 
                   <Form.Control>
                     <Input {...field} />
@@ -92,7 +89,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
 
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
 
@@ -102,7 +99,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
             render={({ field }) => {
               return (
                 <Form.Item>
-                  <Form.Label>{t("campaigns.fields.identifier")}</Form.Label>
+                  <Form.Label>{t("campaigns.fields.identifier")}*</Form.Label>
 
                   <Form.Control>
                     <Input {...field} />
@@ -110,7 +107,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
 
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
         </div>
@@ -129,7 +126,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
 
                 <Form.ErrorMessage />
               </Form.Item>
-            )
+            );
           }}
         />
       </div>
@@ -141,21 +138,15 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
           render={({ field }) => {
             return (
               <Form.Item>
-                <Form.Label optional>
-                  {t("campaigns.fields.start_date")}
-                </Form.Label>
+                <Form.Label optional>{t("campaigns.fields.start_date")}</Form.Label>
 
                 <Form.Control>
-                  <DatePicker
-                    granularity="minute"
-                    shouldCloseOnSelect={false}
-                    {...field}
-                  />
+                  <DatePicker granularity="minute" shouldCloseOnSelect={false} {...field} />
                 </Form.Control>
 
                 <Form.ErrorMessage />
               </Form.Item>
-            )
+            );
           }}
         />
 
@@ -165,21 +156,15 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
           render={({ field }) => {
             return (
               <Form.Item>
-                <Form.Label optional>
-                  {t("campaigns.fields.end_date")}
-                </Form.Label>
+                <Form.Label optional>{t("campaigns.fields.end_date")}</Form.Label>
 
                 <Form.Control>
-                  <DatePicker
-                    granularity="minute"
-                    shouldCloseOnSelect={false}
-                    {...field}
-                  />
+                  <DatePicker granularity="minute" shouldCloseOnSelect={false} {...field} />
                 </Form.Control>
 
                 <Form.ErrorMessage />
               </Form.Item>
-            )
+            );
           }}
         />
       </div>
@@ -232,7 +217,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
               </Form.Control>
               <Form.ErrorMessage />
             </Form.Item>
-          )
+          );
         }}
       />
 
@@ -267,18 +252,13 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
                       <Select.Content>
                         {Object.values(currencies)
                           .filter(
-                            (currency) =>
+                            currency =>
                               !!store?.supported_currencies?.find(
-                                (c) =>
-                                  c.currency_code ===
-                                  currency.code.toLocaleLowerCase()
+                                c => c.currency_code === currency.code.toLocaleLowerCase()
                               )
                           )
-                          .map((currency) => (
-                            <Select.Item
-                              value={currency.code.toLowerCase()}
-                              key={currency.code}
-                            >
+                          .map(currency => (
+                            <Select.Item value={currency.code.toLowerCase()} key={currency.code}>
                               {currency.name}
                             </Select.Item>
                           ))}
@@ -287,7 +267,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
         )}
@@ -300,9 +280,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
               <Form.Item className="basis-1/2">
                 <Form.Label
                   tooltip={
-                    !currency && isTypeSpend
-                      ? t("promotions.fields.amount.tooltip")
-                      : undefined
+                    !currency && isTypeSpend ? t("promotions.fields.amount.tooltip") : undefined
                   }
                 >
                   {t("campaigns.budget.fields.limit")}
@@ -312,13 +290,9 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
                   {isTypeSpend ? (
                     <CurrencyInput
                       min={0}
-                      onValueChange={(value) =>
-                        onChange(value ? parseInt(value) : "")
-                      }
+                      onValueChange={value => onChange(value ? parseInt(value) : "")}
                       code={currencyValue}
-                      symbol={
-                        currencyValue ? getCurrencySymbol(currencyValue) : ""
-                      }
+                      symbol={currencyValue ? getCurrencySymbol(currencyValue) : ""}
                       {...field}
                       value={value}
                       disabled={!currency && isTypeSpend}
@@ -330,19 +304,15 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
                       {...field}
                       min={0}
                       value={value}
-                      onChange={(e) => {
-                        onChange(
-                          e.target.value === ""
-                            ? null
-                            : parseInt(e.target.value)
-                        )
+                      onChange={e => {
+                        onChange(e.target.value === "" ? null : parseInt(e.target.value));
                       }}
                     />
                   )}
                 </Form.Control>
                 <Form.ErrorMessage />
               </Form.Item>
-            )
+            );
           }}
         />
 
@@ -398,5 +368,5 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};

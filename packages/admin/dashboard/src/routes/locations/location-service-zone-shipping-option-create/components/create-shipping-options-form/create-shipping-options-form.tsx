@@ -156,13 +156,13 @@ export function CreateShippingOptionsForm({
         data: fulfillmentOptionData as unknown as Record<string, unknown>,
         rules: [
           {
-            // eslint-disable-next-line
+             
             value: isReturn ? "true" : "false",
             attribute: "is_return",
             operator: "eq",
           },
           {
-            // eslint-disable-next-line
+             
             value: data.enabled_in_store ? "true" : "false",
             attribute: "enabled_in_store",
             operator: "eq",

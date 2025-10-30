@@ -101,8 +101,8 @@ export const ClaimOutboundSection = ({
             (a) => a.claim_id === claim.id && a.action === "ITEM_ADD"
           )
       ),
-    [preview.items]
-  )
+    [preview.items, claim.id]
+  );
 
   const variantItemMap = useMemo(
     () => new Map(order?.items?.map((i) => [i.variant_id, i])),
@@ -121,23 +121,23 @@ export const ClaimOutboundSection = ({
 
   const variantOutboundMap = useMemo(
     () => new Map(previewOutboundItems.map((i) => [i.variant_id, i])),
-    [previewOutboundItems, outboundItems]
-  )
+    [previewOutboundItems]
+  );
 
   useEffect(() => {
-    const existingItemsMap: Record<string, boolean> = {}
+    const existingItemsMap: Record<string, boolean> = {};
 
     previewOutboundItems.forEach((i) => {
-      const ind = outboundItems.findIndex((field) => field.item_id === i.id)
+      const ind = outboundItems.findIndex((field) => field.item_id === i.id);
 
-      existingItemsMap[i.id] = true
+      existingItemsMap[i.id] = true;
 
       if (ind > -1) {
         if (outboundItems[ind].quantity !== i.detail.quantity) {
           update(ind, {
             ...outboundItems[ind],
             quantity: i.detail.quantity,
-          })
+          });
         }
       } else {
         append(
@@ -147,16 +147,16 @@ export const ClaimOutboundSection = ({
             variant_id: i.variant_id,
           },
           { shouldFocus: false }
-        )
+        );
       }
-    })
+    });
 
     outboundItems.forEach((i, ind) => {
       if (!(i.item_id in existingItemsMap)) {
-        remove(ind)
+        remove(ind);
       }
-    })
-  }, [previewOutboundItems])
+    });
+  }, [previewOutboundItems, outboundItems, append, remove, update]);
 
   const locationId = form.watch("location_id")
   const showOutboundItemsPlaceholder = !outboundItems.length
@@ -233,28 +233,28 @@ export const ClaimOutboundSection = ({
 
   const showLevelsWarning = useMemo(() => {
     if (!locationId) {
-      return false
+      return false;
     }
 
     const allItemsHaveLocation = outboundItems
       .map((i) => {
-        const item = variantItemMap.get(i.variant_id)
+        const item = variantItemMap.get(i.variant_id);
         if (!item?.variant_id || !item?.variant) {
-          return true
+          return true;
         }
 
         if (!item.variant?.manage_inventory) {
-          return true
+          return true;
         }
 
         return inventoryMap[item.variant_id]?.find(
           (l) => l.location_id === locationId
-        )
+        );
       })
-      .every(Boolean)
+      .every(Boolean);
 
-    return !allItemsHaveLocation
-  }, [outboundItems, inventoryMap, locationId])
+    return !allItemsHaveLocation;
+  }, [outboundItems, inventoryMap, locationId, variantItemMap]);
 
   useEffect(() => {
     // TODO: Ensure inventory validation occurs correctly

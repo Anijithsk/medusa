@@ -38,7 +38,7 @@ export function OrderAllocateItemsItem({
   const { t } = useTranslation()
 
   const variant = item.variant
-  const inventory = item.variant?.inventory || []
+  const inventory = useMemo(() => item.variant?.inventory || [], [item.variant?.inventory])
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -66,7 +66,7 @@ export function OrderAllocateItemsItem({
       availableQuantity: locationInventory.available_quantity,
       inStockQuantity: locationInventory.stocked_quantity,
     }
-  }, [variant, locationId])
+  }, [variant, locationId, inventory])
 
   const hasQuantityError =
     !hasInventoryKit &&

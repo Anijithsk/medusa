@@ -199,7 +199,7 @@ export function OrderAllocateItemsForm({ order }: OrderAllocateItemsFormProps) {
     if (selectedLocationId) {
       form.setValue("quantity", defaultAllocations(itemsToAllocate))
     }
-  }, [selectedLocationId])
+  }, [selectedLocationId, form, itemsToAllocate])
 
   const allocationError =
     form.formState.errors?.root?.quantityNotAllocated?.message

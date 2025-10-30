@@ -26,6 +26,7 @@ export const ManageLocationsForm = ({
   const existingLocationLevels = useMemo(
     () => new Set(item.location_levels?.map((l) => l.location_id) ?? []),
     [item.location_levels]
+    [item.location_levels]
   )
 
   const { t } = useTranslation()
