@@ -1,59 +1,55 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useTranslation } from "react-i18next"
-import * as zod from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
+import * as zod from "zod";
 
-import { AdminFulfillment, AdminOrder } from "@medusajs/types"
-import { Button, Heading, Input, Switch, toast } from "@medusajs/ui"
-import { useFieldArray, useForm } from "react-hook-form"
+import { AdminFulfillment, AdminOrder } from "@medusajs/types";
+import { Button, Heading, Input, Switch, toast } from "@medusajs/ui";
+import { useFieldArray, useForm } from "react-hook-form";
 
-import { Form } from "../../../../../components/common/form"
-import {
-  RouteFocusModal,
-  useRouteModal,
-} from "../../../../../components/modals"
-import { KeyboundForm } from "../../../../../components/utilities/keybound-form"
-import { useCreateOrderShipment } from "../../../../../hooks/api"
-import { CreateShipmentSchema } from "./constants"
+import { Form } from "../../../../../components/common/form";
+import { RouteFocusModal, useRouteModal } from "../../../../../components/modals";
+import { KeyboundForm } from "../../../../../components/utilities/keybound-form";
+import { useCreateOrderShipment } from "../../../../../hooks/api";
+import { CreateShipmentSchema } from "./constants";
 
 type OrderCreateFulfillmentFormProps = {
-  order: AdminOrder
-  fulfillment: AdminFulfillment
-}
+  order: AdminOrder;
+  fulfillment: AdminFulfillment;
+};
 
-export function OrderCreateShipmentForm({
-  order,
-  fulfillment,
-}: OrderCreateFulfillmentFormProps) {
-  const { t } = useTranslation()
-  const { handleSuccess } = useRouteModal()
+export function OrderCreateShipmentForm({ order, fulfillment }: OrderCreateFulfillmentFormProps) {
+  const { t } = useTranslation();
+  const { handleSuccess } = useRouteModal();
 
-  const { mutateAsync: createShipment, isPending: isMutating } =
-    useCreateOrderShipment(order.id, fulfillment?.id)
+  const { mutateAsync: createShipment, isPending: isMutating } = useCreateOrderShipment(
+    order.id,
+    fulfillment?.id
+  );
 
   const form = useForm<zod.infer<typeof CreateShipmentSchema>>({
     defaultValues: {
       send_notification: !order.no_notification,
     },
     resolver: zodResolver(CreateShipmentSchema),
-  })
+  });
 
   const { fields: labels, append } = useFieldArray({
     name: "labels",
     control: form.control,
-  })
+  });
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async data => {
     const addedLabels = data.labels
-      .filter((l) => !!l.tracking_number)
-      .map((l) => ({
+      .filter(l => !!l.tracking_number)
+      .map(l => ({
         tracking_number: l.tracking_number,
         tracking_url: "#",
         label_url: "#",
-      }))
+      }));
 
     await createShipment(
       {
-        items: fulfillment?.items?.map((i) => ({
+        items: fulfillment?.items?.map(i => ({
           id: i.line_item_id,
           quantity: i.quantity,
         })),
@@ -62,22 +58,19 @@ export function OrderCreateShipmentForm({
       },
       {
         onSuccess: () => {
-          toast.success(t("orders.shipment.toastCreated"))
-          handleSuccess(`/orders/${order.id}`)
+          toast.success(t("orders.shipment.toastCreated"));
+          handleSuccess(`/orders/${order.id}`);
         },
-        onError: (e) => {
-          toast.error(e.message)
+        onError: e => {
+          toast.error(e.message);
         },
       }
-    )
-  })
+    );
+  });
 
   return (
     <RouteFocusModal.Form form={form}>
-      <KeyboundForm
-        onSubmit={handleSubmit}
-        className="flex h-full flex-col overflow-hidden"
-      >
+      <KeyboundForm onSubmit={handleSubmit} className="flex h-full flex-col overflow-hidden">
         <RouteFocusModal.Header />
 
         <RouteFocusModal.Body className="flex h-full w-full flex-col items-center divide-y overflow-y-auto">
@@ -85,9 +78,7 @@ export function OrderCreateShipmentForm({
             <div className="flex w-full max-w-[736px] flex-col justify-center px-2 pb-2">
               <div className="flex flex-col divide-y">
                 <div className="flex flex-1 flex-col">
-                  <Heading className="mb-4">
-                    {t("orders.shipment.title")}
-                  </Heading>
+                  <Heading className="mb-4">{t("orders.shipment.title")}</Heading>
 
                   {labels.map((label, index) => (
                     <Form.Field
@@ -98,16 +89,14 @@ export function OrderCreateShipmentForm({
                         return (
                           <Form.Item className="mb-4">
                             {index === 0 && (
-                              <Form.Label>
-                                {t("orders.shipment.trackingNumber")}
-                              </Form.Label>
+                              <Form.Label>{t("orders.shipment.trackingNumber")}</Form.Label>
                             )}
                             <Form.Control>
                               <Input {...field} placeholder="123-456-789" />
                             </Form.Control>
                             <Form.ErrorMessage />
                           </Form.Item>
-                        )
+                        );
                       }}
                     />
                   ))}
@@ -130,9 +119,7 @@ export function OrderCreateShipmentForm({
                       return (
                         <Form.Item>
                           <div className="flex items-center justify-between">
-                            <Form.Label>
-                              {t("orders.shipment.sendNotification")}
-                            </Form.Label>
+                            <Form.Label>{t("orders.shipment.sendNotification")}</Form.Label>
                             <Form.Control>
                               <Form.Control>
                                 <Switch
@@ -150,7 +137,7 @@ export function OrderCreateShipmentForm({
                           </Form.Hint>
                           <Form.ErrorMessage />
                         </Form.Item>
-                      )
+                      );
                     }}
                   />
                 </div>
@@ -170,5 +157,5 @@ export function OrderCreateShipmentForm({
         </RouteFocusModal.Footer>
       </KeyboundForm>
     </RouteFocusModal.Form>
-  )
+  );
 }

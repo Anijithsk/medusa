@@ -1,5 +1,7 @@
-import { defineWidgetConfig } from "@medusajs/admin-sdk";
 import { DetailWidgetProps, HttpTypes } from "@medusajs/types";
+
+// Define widget config helper locally
+const defineWidgetConfig = (config: any) => config;
 
 import { Container, Heading, Text } from "@medusajs/ui";
 

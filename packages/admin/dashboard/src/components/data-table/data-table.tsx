@@ -20,12 +20,12 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { useQueryParams } from "../../hooks/use-query-params";
 import { ActionMenu } from "../common/action-menu";
-import { ViewPills } from "../table/view-selector"
-import { useFeatureFlag } from "../../providers/feature-flag-provider"
+import { ViewPills } from "../table/view-selector";
+import { useFeatureFlag } from "../../providers/feature-flag-provider";
 
 // Types for column visibility and ordering
-type VisibilityState = Record<string, boolean>
-type ColumnOrderState = string[]
+type VisibilityState = Record<string, boolean>;
+type ColumnOrderState = string[];
 
 type DataTableActionProps = {
   label: string;
@@ -66,14 +66,14 @@ interface DataTableProps<TData> {
   filters?: DataTableFilter[];
   commands?: DataTableCommand[];
   action?: DataTableActionProps;
-  actions?: DataTableActionProps[]
+  actions?: DataTableActionProps[];
   actionMenu?: DataTableActionMenuProps;
   rowCount?: number;
   getRowId: (row: TData) => string;
   enablePagination?: boolean;
   enableSearch?: boolean;
   autoFocusSearch?: boolean;
-  enableFilterMenu?: boolean
+  enableFilterMenu?: boolean;
   rowHref?: (row: TData) => string;
   emptyState?: DataTableEmptyStateProps;
   heading?: string;
@@ -87,18 +87,18 @@ interface DataTableProps<TData> {
     enableRowSelection?: boolean | ((row: DataTableRow<TData>) => boolean);
   };
   layout?: "fill" | "auto";
-  enableColumnVisibility?: boolean
-  initialColumnVisibility?: VisibilityState
-  onColumnVisibilityChange?: (visibility: VisibilityState) => void
-  columnOrder?: ColumnOrderState
-  onColumnOrderChange?: (order: ColumnOrderState) => void
-  enableViewSelector?: boolean
-  entity?: string
+  enableColumnVisibility?: boolean;
+  initialColumnVisibility?: VisibilityState;
+  onColumnVisibilityChange?: (visibility: VisibilityState) => void;
+  columnOrder?: ColumnOrderState;
+  onColumnOrderChange?: (order: ColumnOrderState) => void;
+  enableViewSelector?: boolean;
+  entity?: string;
   currentColumns?: {
-    visible: string[]
-    order: string[]
-  }
-  filterBarContent?: React.ReactNode
+    visible: string[];
+    order: string[];
+  };
+  filterBarContent?: React.ReactNode;
 }
 
 export const DataTable = <TData,>({
@@ -135,48 +135,46 @@ export const DataTable = <TData,>({
   filterBarContent,
 }: DataTableProps<TData>) => {
   const { t } = useTranslation();
-  const isViewConfigEnabled = useFeatureFlag("view_configurations")
+  const isViewConfigEnabled = useFeatureFlag("view_configurations");
 
   // If view config is disabled, don't use column visibility features
-  const effectiveEnableColumnVisibility =
-    isViewConfigEnabled && enableColumnVisibility
-  const effectiveEnableViewSelector = isViewConfigEnabled && enableViewSelector
+  const effectiveEnableColumnVisibility = isViewConfigEnabled && enableColumnVisibility;
+  const effectiveEnableViewSelector = isViewConfigEnabled && enableViewSelector;
 
   const enableFiltering = filters && filters.length > 0;
-  const showFilterMenu =
-    enableFilterMenu !== undefined ? enableFilterMenu : enableFiltering
+  const showFilterMenu = enableFilterMenu !== undefined ? enableFilterMenu : enableFiltering;
   const enableCommands = commands && commands.length > 0;
   const enableSorting = columns.some(column => column.enableSorting);
 
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>(initialColumnVisibility)
+    React.useState<VisibilityState>(initialColumnVisibility);
 
   // Update column visibility when initial visibility changes
   React.useEffect(() => {
     // Deep compare to check if the visibility has actually changed
-    const currentKeys = Object.keys(columnVisibility).sort()
-    const newKeys = Object.keys(initialColumnVisibility).sort()
+    const currentKeys = Object.keys(columnVisibility).sort();
+    const newKeys = Object.keys(initialColumnVisibility).sort();
 
     const hasChanged =
       currentKeys.length !== newKeys.length ||
       currentKeys.some((key, index) => key !== newKeys[index]) ||
       Object.entries(initialColumnVisibility).some(
         ([key, value]) => columnVisibility[key] !== value
-      )
+      );
 
     if (hasChanged) {
-      setColumnVisibility(initialColumnVisibility)
+      setColumnVisibility(initialColumnVisibility);
     }
-  }, [initialColumnVisibility])
+  }, [initialColumnVisibility, columnVisibility]);
 
   // Wrapper function to handle column visibility changes
   const handleColumnVisibilityChange = React.useCallback(
     (visibility: VisibilityState) => {
-      setColumnVisibility(visibility)
-      onColumnVisibilityChange?.(visibility)
+      setColumnVisibility(visibility);
+      onColumnVisibilityChange?.(visibility);
     },
     [onColumnVisibilityChange]
-  )
+  );
 
   // Extract filter IDs for query param management
   const filterIds = useMemo(() => filters?.map(f => f.id) ?? [], [filters]);
@@ -248,7 +246,7 @@ export const DataTable = <TData,>({
       Array.from(prev.keys()).forEach(key => {
         if (prefixedFilterIds.includes(key)) {
           // Extract the unprefixed key
-          const unprefixedKey = prefix ? key.replace(`${prefix}_`, "") : key
+          const unprefixedKey = prefix ? key.replace(`${prefix}_`, "") : key;
           if (!(unprefixedKey in value)) {
             prev.delete(key);
           }
@@ -257,11 +255,11 @@ export const DataTable = <TData,>({
 
       // Add or update filters in the state
       Object.entries(value).forEach(([key, filter]) => {
-        const prefixedKey = getQueryParamKey(key, prefix)
+        const prefixedKey = getQueryParamKey(key, prefix);
         if (filter !== undefined) {
-          prev.set(prefixedKey, JSON.stringify(filter))
+          prev.set(prefixedKey, JSON.stringify(filter));
         } else {
-          prev.delete(prefixedKey)
+          prev.delete(prefixedKey);
         }
       });
 
@@ -281,7 +279,7 @@ export const DataTable = <TData,>({
       search: search,
     }),
     [filtering, sorting, search]
-  )
+  );
 
   const handleSortingChange = (value: DataTableSortingState) => {
     setSearchParams(prev => {
@@ -379,9 +377,7 @@ export const DataTable = <TData,>({
   return (
     <UiDataTable
       instance={instance}
-      className={
-        layout === "fill" ? "h-full [&_tr]:last-of-type:!border-b" : undefined
-      }
+      className={layout === "fill" ? "h-full [&_tr]:last-of-type:!border-b" : undefined}
     >
       <UiDataTable.Toolbar
         className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center"
@@ -420,25 +416,17 @@ export const DataTable = <TData,>({
               </div>
             )}
             {actionMenu && <ActionMenu variant="primary" {...actionMenu} />}
-            {actions && actions.length > 0 && (
-              <DataTableActions actions={actions} />
-            )}
+            {actions && actions.length > 0 && <DataTableActions actions={actions} />}
             {!actions && action && <DataTableAction {...action} />}
           </div>
         </div>
       </UiDataTable.Toolbar>
       <UiDataTable.Table emptyState={emptyState} />
-      {enablePagination && (
-        <UiDataTable.Pagination translations={paginationTranslations} />
-      )}
-      {enableCommands && (
-        <UiDataTable.CommandBar
-          selectedLabel={(count) => `${count} selected`}
-        />
-      )}
+      {enablePagination && <UiDataTable.Pagination translations={paginationTranslations} />}
+      {enableCommands && <UiDataTable.CommandBar selectedLabel={count => `${count} selected`} />}
     </UiDataTable>
-  )
-}
+  );
+};
 
 function transformSortingState(value: DataTableSortingState) {
   return value.desc ? `-${value.id}` : value.id;
@@ -472,7 +460,7 @@ function parseFilterState(filterIds: string[], value: Record<string, string | un
     const filterValue = value[id];
 
     if (filterValue !== undefined) {
-      filters[id] = JSON.parse(filterValue)
+      filters[id] = JSON.parse(filterValue);
     }
   }
 
@@ -498,7 +486,7 @@ const useDataTableTranslations = () => {
     clearAll: t("actions.clearAll"),
     sort: t("filters.sortLabel"),
     columns: "Columns",
-  }
+  };
 
   return {
     pagination: paginationTranslations,
@@ -526,8 +514,8 @@ const DataTableAction = ({ label, disabled, ...props }: DataTableActionProps) =>
     <Button {...buttonProps} onClick={props.onClick}>
       {label}
     </Button>
-  )
-}
+  );
+};
 
 const DataTableActions = ({ actions }: { actions: DataTableActionProps[] }) => {
   return (
@@ -536,5 +524,5 @@ const DataTableActions = ({ actions }: { actions: DataTableActionProps[] }) => {
         <DataTableAction key={index} {...action} />
       ))}
     </div>
-  )
-}
+  );
+};

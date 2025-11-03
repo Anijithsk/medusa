@@ -49,10 +49,10 @@ export const useSettingRoutes = (): INavItem[] => {
           label: t("returnReasons.domain"),
           to: "/settings/return-reasons",
         },
-       hasPermission("/admin/refund-reasons", "GET") && {
-        label: t("refundReasons.domain"),
-        to: "/settings/refund-reasons",
-      },
+        hasPermission("/admin/refund-reasons", "GET") && {
+          label: t("refundReasons.domain"),
+          to: "/settings/refund-reasons",
+        },
         hasPermission("/admin/sales-channels", "GET") && {
           label: t("salesChannels.domain"),
           to: "/settings/sales-channels",

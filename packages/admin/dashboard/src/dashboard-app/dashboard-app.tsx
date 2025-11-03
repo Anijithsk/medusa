@@ -11,7 +11,7 @@ import * as React from "react";
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import { INavItem } from "../components/layout/nav-item";
 import { Providers } from "../providers";
-import coreTranslations from "../i18n/translations"
+import coreTranslations from "../i18n/translations";
 import { getRouteMap } from "./routes/get-route.map";
 import { createRouteMap, getRouteExtensions } from "./routes/utils";
 import {
@@ -47,7 +47,7 @@ export class DashboardApp {
   private displays: DisplayMap;
   private coreRoutes: RouteObject[];
   private settingsRoutes: RouteObject[];
-  private i18nResources: I18nExtension
+  private i18nResources: I18nExtension;
 
   constructor({ plugins }: DashboardAppProps) {
     this.widgets = this.populateWidgets(plugins);
@@ -61,7 +61,7 @@ export class DashboardApp {
     this.fields = fields;
     this.configs = configs;
     this.displays = this.populateDisplays(plugins);
-    this.i18nResources = this.populateI18n(plugins)
+    this.i18nResources = this.populateI18n(plugins);
   }
 
   private populateRoutes(plugins: DashboardPlugin[]) {
@@ -358,16 +358,14 @@ export class DashboardApp {
     return displays;
   }
 
-  private populateI18n(
-    plugins: DashboardPlugin[]
-  ): I18nExtension {
-    let resources: I18nExtension = { ...coreTranslations }
+  private populateI18n(plugins: DashboardPlugin[]): I18nExtension {
+    let resources: I18nExtension = { ...coreTranslations };
 
     for (const plugin of plugins) {
-      resources = deepMerge(resources, plugin.i18nModule?.resources)
+      resources = deepMerge(resources, plugin.i18nModule?.resources);
     }
 
-    return resources
+    return resources;
   }
 
   private processDisplays(
@@ -424,7 +422,7 @@ export class DashboardApp {
   }
 
   private getI18nResources() {
-    return this.i18nResources
+    return this.i18nResources;
   }
 
   get api() {

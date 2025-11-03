@@ -13,7 +13,7 @@ import {
   useProductCategories,
   useUpdateProductCategory,
 } from "../../../../../hooks/api/categories";
-import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction";
 
 const EditCategorySchema = z.object({
   name: z.string().min(1),
@@ -30,7 +30,7 @@ type EditCategoryFormProps = {
 export const EditCategoryForm = ({ category }: EditCategoryFormProps) => {
   const { t } = useTranslation();
   const { handleSuccess } = useRouteModal();
-  const direction = useDocumentDirection()
+  const direction = useDocumentDirection();
   const form = useForm<z.infer<typeof EditCategorySchema>>({
     defaultValues: {
       name: category.name,
@@ -143,11 +143,7 @@ export const EditCategoryForm = ({ category }: EditCategoryFormProps) => {
                     <Form.Item>
                       <Form.Label>{t("categories.fields.status.label")}</Form.Label>
                       <Form.Control>
-                        <Select
-                          dir={direction}
-                          {...field}
-                          onValueChange={onChange}
-                        >
+                        <Select dir={direction} {...field} onValueChange={onChange}>
                           <Select.Trigger ref={ref}>
                             <Select.Value />
                           </Select.Trigger>
@@ -174,11 +170,7 @@ export const EditCategoryForm = ({ category }: EditCategoryFormProps) => {
                     <Form.Item>
                       <Form.Label>{t("categories.fields.visibility.label")}</Form.Label>
                       <Form.Control>
-                        <Select
-                          dir={direction}
-                          {...field}
-                          onValueChange={onChange}
-                        >
+                        <Select dir={direction} {...field} onValueChange={onChange}>
                           <Select.Trigger ref={ref}>
                             <Select.Value />
                           </Select.Trigger>

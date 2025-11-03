@@ -22,12 +22,12 @@ import { useGlobalShortcuts } from "../../../providers/keybind-provider/hooks";
 import { useTheme } from "../../../providers/theme-provider";
 import { decryptObject } from "../../../utils/encryption";
 import { HttpTypes } from "@medusajs/types";
-import { useDocumentDirection } from "../../../hooks/use-document-direction"
+import { useDocumentDirection } from "../../../hooks/use-document-direction";
 
 export const UserMenu = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const direction = useDocumentDirection()
+  const direction = useDocumentDirection();
 
   const [openMenu, setOpenMenu] = useState(false);
   const [openModal, setOpenModal] = useState(false);

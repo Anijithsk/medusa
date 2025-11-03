@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
-import { useDocumentDirection } from "../../../../hooks/use-document-direction"
+import { useDocumentDirection } from "../../../../hooks/use-document-direction";
 
 export type DataTableOrderByKey<TData> = {
   key: keyof TData;
@@ -53,7 +53,7 @@ export const DataTableOrderBy = <TData,>({ keys, prefix }: DataTableOrderByProps
   }>(initState(searchParams, prefix));
   const param = prefix ? `${prefix}_order` : "order";
   const { t } = useTranslation();
-  const direction = useDocumentDirection()
+  const direction = useDocumentDirection();
 
   const handleDirChange = (dir: string) => {
     setState(prev => ({

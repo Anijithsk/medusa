@@ -729,8 +729,8 @@ const ReturnBody = ({
       return;
     }
 
-    await cancelReturnRequest().catch((error) => {
-      toast.error(error.message)
+    await cancelReturnRequest().catch(error => {
+      toast.error(error.message);
     });
   };
 
@@ -782,8 +782,8 @@ const ClaimBody = ({ claim, claimReturn }: { claim: AdminClaim; claimReturn?: Ad
       return;
     }
 
-    await cancelClaim().catch((error) => {
-      toast.error(error.message)
+    await cancelClaim().catch(error => {
+      toast.error(error.message);
     });
   };
 
@@ -852,8 +852,8 @@ const ExchangeBody = ({
       return;
     }
 
-    await cancelExchange().catch((error) => {
-      toast.error(error.message)
+    await cancelExchange().catch(error => {
+      toast.error(error.message);
     });
   };
 
@@ -941,8 +941,8 @@ const TransferOrderRequestBody = ({ transfer }: { transfer: AdminOrderChange }) 
       return;
     }
 
-    await cancelTransfer().catch((error) => {
-      toast.error(error.message)
+    await cancelTransfer().catch(error => {
+      toast.error(error.message);
     });
   };
 

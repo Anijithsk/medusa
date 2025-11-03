@@ -1427,9 +1427,7 @@ export function getRouteMap({
                     {
                       path: "",
                       lazy: () =>
-                        import(
-                          "../../routes/shipping-option-types/shipping-option-type-list"
-                        ),
+                        import("../../routes/shipping-option-types/shipping-option-type-list"),
                       children: [
                         {
                           path: "create",
@@ -1445,26 +1443,23 @@ export function getRouteMap({
                       lazy: async () => {
                         const { Component, Breadcrumb, loader } = await import(
                           "../../routes/shipping-option-types/shipping-option-type-detail"
-                        )
+                        );
 
                         return {
                           Component,
                           loader,
                           handle: {
                             breadcrumb: (
-                              // eslint-disable-next-line max-len
                               match: UIMatch<HttpTypes.AdminShippingOptionTypeResponse>
                             ) => <Breadcrumb {...match} />,
                           },
-                        }
+                        };
                       },
                       children: [
                         {
                           path: "edit",
                           lazy: () =>
-                            import(
-                              "../../routes/shipping-option-types/shipping-option-type-edit"
-                            ),
+                            import("../../routes/shipping-option-types/shipping-option-type-edit"),
                         },
                       ],
                     },
@@ -1601,10 +1596,7 @@ export function getRouteMap({
                     },
                     {
                       path: "metadata/edit",
-                      lazy: () =>
-                        import(
-                          "../../routes/product-tags/product-tag-metadata"
-                        ),
+                      lazy: () => import("../../routes/product-tags/product-tag-metadata"),
                     },
                   ],
                 },
@@ -1942,15 +1934,11 @@ export function getRouteMap({
               children: [
                 {
                   path: "",
-                  lazy: () =>
-                    import("../../routes/refund-reasons/refund-reason-list"),
+                  lazy: () => import("../../routes/refund-reasons/refund-reason-list"),
                   children: [
                     {
                       path: "create",
-                      lazy: () =>
-                        import(
-                          "../../routes/refund-reasons/refund-reason-create"
-                        ),
+                      lazy: () => import("../../routes/refund-reasons/refund-reason-create"),
                     },
 
                     {
@@ -1958,10 +1946,7 @@ export function getRouteMap({
                       children: [
                         {
                           path: "edit",
-                          lazy: () =>
-                            import(
-                              "../../routes/refund-reasons/refund-reason-edit"
-                            ),
+                          lazy: () => import("../../routes/refund-reasons/refund-reason-edit"),
                         },
                       ],
                     },

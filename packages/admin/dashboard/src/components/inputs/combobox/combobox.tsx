@@ -42,17 +42,17 @@ const TAG_BASE_WIDTH = 28;
 
 interface ComboboxProps<T extends Value = Value>
   extends Omit<ComponentPropsWithoutRef<"input">, "onChange" | "value"> {
-  value?: T
-  onChange?: (value?: T) => void
-  searchValue?: string
-  onSearchValueChange?: (value: string) => void
-  options: ComboboxOption[]
-  fetchNextPage?: () => void
-  isFetchingNextPage?: boolean
-  onCreateOption?: (value: string) => void
-  noResultsPlaceholder?: ReactNode
-  allowClear?: boolean
-  forceHideInput?: boolean // always hide input -> used for singe value select that don't have query/filter
+  value?: T;
+  onChange?: (value?: T) => void;
+  searchValue?: string;
+  onSearchValueChange?: (value: string) => void;
+  options: ComboboxOption[];
+  fetchNextPage?: () => void;
+  isFetchingNextPage?: boolean;
+  onCreateOption?: (value: string) => void;
+  noResultsPlaceholder?: ReactNode;
+  allowClear?: boolean;
+  forceHideInput?: boolean; // always hide input -> used for singe value select that don't have query/filter
 }
 
 const ComboboxImpl = <T extends Value = string>(
@@ -148,13 +148,13 @@ const ComboboxImpl = <T extends Value = string>(
 
     // do not use `matcher` if the input is hidden
     if (forceHideInput) {
-      return options
+      return options;
     }
 
     return matchSorter(options, defferedSearchValue, {
       keys: ["label"],
-    })
-  }, [options, defferedSearchValue, isSearchControlled, forceHideInput])
+    });
+  }, [options, defferedSearchValue, isSearchControlled, forceHideInput]);
 
   const observer = useRef(
     new IntersectionObserver(
@@ -196,8 +196,8 @@ const ComboboxImpl = <T extends Value = string>(
   const showTag = hasValue && isArrayValue;
   const showSelected = showTag && !searchValue && !open;
 
-  const hideInput = forceHideInput || (!isArrayValue && hasValue && !open)
-  const selectedLabel = options.find((o) => o.value === selectedValues)?.label
+  const hideInput = forceHideInput || (!isArrayValue && hasValue && !open);
+  const selectedLabel = options.find(o => o.value === selectedValues)?.label;
 
   const hidePlaceholder = showSelected || open;
 
@@ -246,9 +246,9 @@ const ComboboxImpl = <T extends Value = string>(
         {showTag && (
           <button
             type="button"
-            onClick={(e) => {
-              e.preventDefault()
-              handleValueChange(isArrayValue ? ([] as unknown as T) : undefined)
+            onClick={e => {
+              e.preventDefault();
+              handleValueChange(isArrayValue ? ([] as unknown as T) : undefined);
             }}
             className="bg-ui-bg-base hover:bg-ui-bg-base-hover txt-compact-small-plus text-ui-fg-subtle focus-within:border-ui-fg-interactive transition-fg absolute start-0.5 top-0.5 z-[1] flex h-[28px] items-center rounded-[4px] border py-[3px] pe-1 ps-1.5 outline-none"
           >
@@ -259,13 +259,10 @@ const ComboboxImpl = <T extends Value = string>(
         <div className="relative flex size-full items-center">
           {showSelected && (
             <div
-              className={clx(
-                "pointer-events-none absolute inset-y-0 flex size-full items-center",
-                {
-                  "start-[calc(var(--tag-width)+8px)]": showTag,
-                  "start-2": !showTag,
-                }
-              )}
+              className={clx("pointer-events-none absolute inset-y-0 flex size-full items-center", {
+                "start-[calc(var(--tag-width)+8px)]": showTag,
+                "start-2": !showTag,
+              })}
             >
               <Text size="small" leading="compact">
                 {t("general.selected")}

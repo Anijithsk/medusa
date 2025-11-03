@@ -7,7 +7,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import * as zod from "zod";
 
-import { RegionCountryDTO } from "@medusajs/types"
+import { RegionCountryDTO } from "@medusajs/types";
 
 import { Form } from "../../../../../components/common/form";
 import { Combobox } from "../../../../../components/inputs/combobox";
@@ -27,13 +27,13 @@ import { formatProvider } from "../../../../../lib/format-provider";
 import { useCountries } from "../../../common/hooks/use-countries";
 import { useCountryTableColumns } from "../../../common/hooks/use-country-table-columns";
 import { useCountryTableQuery } from "../../../common/hooks/use-country-table-query";
-import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
-import { useComboboxData } from "../../../../../hooks/use-combobox-data"
-import { sdk } from "../../../../../lib/client"
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction";
+import { useComboboxData } from "../../../../../hooks/use-combobox-data";
+import { sdk } from "../../../../../lib/client";
 
 type CreateRegionFormProps = {
-  currencies: CurrencyInfo[]
-}
+  currencies: CurrencyInfo[];
+};
 
 const CreateRegionSchema = zod.object({
   name: zod.string().min(1),
@@ -50,10 +50,10 @@ const PAGE_SIZE = 50;
 const STACKED_MODAL_ID = "countries-modal";
 
 export const CreateRegionForm = ({ currencies }: CreateRegionFormProps) => {
-  const { setIsOpen } = useStackedModal()
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
-  const { handleSuccess } = useRouteModal()
-  const direction = useDocumentDirection()
+  const { setIsOpen } = useStackedModal();
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const { handleSuccess } = useRouteModal();
+  const direction = useDocumentDirection();
   const form = useForm<zod.infer<typeof CreateRegionSchema>>({
     defaultValues: {
       name: "",
@@ -167,22 +167,18 @@ export const CreateRegionForm = ({ currencies }: CreateRegionFormProps) => {
   };
 
   const comboboxProviders = useComboboxData({
-    queryFn: (params) =>
-      sdk.admin.payment.listPaymentProviders({ ...params, is_enabled: true }),
+    queryFn: params => sdk.admin.payment.listPaymentProviders({ ...params, is_enabled: true }),
     queryKey: ["payment_providers"],
-    getOptions: (data) =>
-      data.payment_providers.map((pp) => ({
+    getOptions: data =>
+      data.payment_providers.map(pp => ({
         label: formatProvider(pp.id),
         value: pp.id,
       })),
-  })
+  });
 
   return (
     <RouteFocusModal.Form form={form}>
-      <KeyboundForm
-        className="flex h-full flex-col overflow-hidden"
-        onSubmit={handleSubmit}
-      >
+      <KeyboundForm className="flex h-full flex-col overflow-hidden" onSubmit={handleSubmit}>
         <RouteFocusModal.Header />
         <RouteFocusModal.Body className="flex overflow-hidden">
           <div
@@ -221,11 +217,7 @@ export const CreateRegionForm = ({ currencies }: CreateRegionFormProps) => {
                         <Form.Item>
                           <Form.Label>{t("fields.currency")}*</Form.Label>
                           <Form.Control>
-                            <Select
-                              dir={direction}
-                              {...field}
-                              onValueChange={onChange}
-                            >
+                            <Select dir={direction} {...field} onValueChange={onChange}>
                               <Select.Trigger ref={ref}>
                                 <Select.Value />
                               </Select.Trigger>

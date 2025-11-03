@@ -12,19 +12,16 @@ import { useEffect } from "react";
 import { useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { Form } from "../../../../../components/common/form"
-import { useStore } from "../../../../../hooks/api/store"
-import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
-import {
-  currencies,
-  getCurrencySymbol,
-} from "../../../../../lib/data/currencies"
-import { Combobox } from "../../../../../components/inputs/combobox"
+import { Form } from "../../../../../components/common/form";
+import { useStore } from "../../../../../hooks/api/store";
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction";
+import { currencies, getCurrencySymbol } from "../../../../../lib/data/currencies";
+import { Combobox } from "../../../../../components/inputs/combobox";
 
 export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
-  const { t } = useTranslation()
-  const { store } = useStore()
-  const direction = useDocumentDirection()
+  const { t } = useTranslation();
+  const { store } = useStore();
+  const direction = useDocumentDirection();
   const watchValueType = useWatch({
     control: form.control,
     name: `${fieldScope}budget.type`,
@@ -48,11 +45,11 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
     form.setValue(`${fieldScope}budget.limit`, null);
 
     if (isTypeSpend) {
-      form.setValue(`campaign.budget.currency_code`, promotionCurrencyValue)
+      form.setValue(`campaign.budget.currency_code`, promotionCurrencyValue);
     } else {
-      form.setValue(`campaign.budget.currency_code`, null)
+      form.setValue(`campaign.budget.currency_code`, null);
     }
-  }, [promotionCurrencyValue, isTypeSpend])
+  }, [promotionCurrencyValue, isTypeSpend, fieldScope, form]);
 
   if (promotionCurrencyValue) {
     const formCampaignBudget = form.getValues().campaign?.budget;
@@ -323,11 +320,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
             render={({ field }) => {
               return (
                 <Form.Item className="basis-1/2">
-                  <Form.Label
-                    tooltip={t(
-                      "campaigns.budget.fields.budgetAttributeTooltip"
-                    )}
-                  >
+                  <Form.Label tooltip={t("campaigns.budget.fields.budgetAttributeTooltip")}>
                     {t("campaigns.budget.fields.budgetAttribute")}
                   </Form.Label>
 
@@ -335,11 +328,11 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
                     <Combobox
                       key="attribute"
                       {...field}
-                      onChange={(e) => {
+                      onChange={e => {
                         if (typeof e === "undefined") {
-                          field.onChange(null)
+                          field.onChange(null);
                         } else {
-                          field.onChange(e)
+                          field.onChange(e);
                         }
                       }}
                       allowClear
@@ -362,7 +355,7 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
         )}

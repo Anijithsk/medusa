@@ -1,31 +1,31 @@
-import { ChartPie, PencilSquare } from "@medusajs/icons"
-import { AdminCampaign } from "@medusajs/types"
-import { Container, Heading, Text } from "@medusajs/ui"
-import { Trans, useTranslation } from "react-i18next"
-import { ActionMenu } from "../../../../../components/common/action-menu"
+import { ChartPie, PencilSquare } from "@medusajs/icons";
+import { AdminCampaign } from "@medusajs/types";
+import { Container, Heading, Text } from "@medusajs/ui";
+import { Trans, useTranslation } from "react-i18next";
+import { ActionMenu } from "../../../../../components/common/action-menu";
 
 type CampaignBudgetProps = {
-  campaign: AdminCampaign
-}
+  campaign: AdminCampaign;
+};
 
 export const CampaignBudget = ({ campaign }: CampaignBudgetProps) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const getTranslation = () => {
-    const budget = campaign.budget
+    const budget = campaign.budget;
 
     if (budget?.type === "use_by_attribute") {
       if (budget?.attribute === "customer_id") {
-        return t(`campaigns.budget.fields.totalUsedByAttributeCustomerId`)
+        return t(`campaigns.budget.fields.totalUsedByAttributeCustomerId`);
       } else if (budget?.attribute === "customer_email") {
-        return t(`campaigns.budget.fields.totalUsedByAttributeEmail`)
+        return t(`campaigns.budget.fields.totalUsedByAttributeEmail`);
       }
       return t(`campaigns.budget.fields.totalUsedByAttribute`, {
         attribute: budget?.attribute,
-      })
+      });
     }
-    return t(`campaigns.fields.budget_limit`)
-  }
+    return t(`campaigns.fields.budget_limit`);
+  };
 
   return (
     <Container className="flex flex-col gap-y-4 px-6 py-4">
@@ -37,10 +37,7 @@ export const CampaignBudget = ({ campaign }: CampaignBudgetProps) => {
             </div>
           </div>
 
-          <Heading
-            className="text-ui-fg-subtle ms-10 mt-[1.5px] font-normal"
-            level="h3"
-          >
+          <Heading className="text-ui-fg-subtle ms-10 mt-[1.5px] font-normal" level="h3">
             {getTranslation()}
           </Heading>
         </div>
@@ -76,18 +73,12 @@ export const CampaignBudget = ({ campaign }: CampaignBudgetProps) => {
                   : "",
             }}
             components={[
-              <span
-                key="amount"
-                className="text-ui-fg-base txt-compact-medium-plus text-lg"
-              />,
-              <span
-                key="currency"
-                className="text-ui-fg-base txt-compact-medium-plus text-lg"
-              />,
+              <span key="amount" className="text-ui-fg-base txt-compact-medium-plus text-lg" />,
+              <span key="currency" className="text-ui-fg-base txt-compact-medium-plus text-lg" />,
             ]}
           />
         </Text>
       </div>
     </Container>
-  )
-}
+  );
+};

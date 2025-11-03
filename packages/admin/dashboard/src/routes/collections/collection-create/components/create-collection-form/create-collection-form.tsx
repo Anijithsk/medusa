@@ -46,10 +46,7 @@ export const CreateCollectionForm = () => {
 
   return (
     <RouteFocusModal.Form form={form}>
-      <KeyboundForm
-        onSubmit={handleSubmit}
-        className="flex h-full flex-col overflow-hidden"
-      >
+      <KeyboundForm onSubmit={handleSubmit} className="flex h-full flex-col overflow-hidden">
         <RouteFocusModal.Header />
 
         <RouteFocusModal.Body className="flex size-full flex-col items-center p-16">
@@ -102,12 +99,7 @@ export const CreateCollectionForm = () => {
               {t("actions.cancel")}
             </Button>
           </RouteFocusModal.Close>
-          <Button
-            size="small"
-            variant="primary"
-            type="submit"
-            isLoading={isPending}
-          >
+          <Button size="small" variant="primary" type="submit" isLoading={isPending}>
             {t("actions.create")}
           </Button>
         </RouteFocusModal.Footer>

@@ -20,7 +20,7 @@ import { StackedFocusModal } from "../../../../../components/modals/stacked-focu
 import { useStackedModal } from "../../../../../components/modals/stacked-modal-provider";
 import { PriceListCustomerGroupRuleForm } from "../../../common/components/price-list-customer-group-rule-form";
 import type { PricingCreateSchemaType, PricingCustomerGroupsArrayType } from "./schema";
-import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction";
 
 type PriceListDetailsFormProps = {
   form: UseFormReturn<PricingCreateSchemaType>;
@@ -28,7 +28,7 @@ type PriceListDetailsFormProps = {
 
 export const PriceListDetailsForm = ({ form }: PriceListDetailsFormProps) => {
   const { t } = useTranslation();
-  const direction = useDocumentDirection()
+  const direction = useDocumentDirection();
   const { fields, remove, append } = useFieldArray({
     control: form.control,
     name: "rules.customer_group_id",
@@ -122,11 +122,7 @@ export const PriceListDetailsForm = ({ form }: PriceListDetailsFormProps) => {
                   <Form.Item>
                     <Form.Label>{t("priceLists.fields.status.label")}</Form.Label>
                     <Form.Control>
-                      <Select
-                        dir={direction}
-                        {...field}
-                        onValueChange={onChange}
-                      >
+                      <Select dir={direction} {...field} onValueChange={onChange}>
                         <Select.Trigger ref={ref}>
                           <Select.Value />
                         </Select.Trigger>

@@ -6,33 +6,26 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom";
 
-import { HttpTypes } from "@medusajs/types"
-import { ActionMenu } from "../../../../../components/common/action-menu"
-import { _DataTable } from "../../../../../components/table/data-table"
-import {
-  useDeleteProduct,
-  useProducts,
-} from "../../../../../hooks/api/products"
-import { useProductTableColumns } from "../../../../../hooks/table/columns/use-product-table-columns"
-import { useProductTableFilters } from "../../../../../hooks/table/filters/use-product-table-filters"
-import { useProductTableQuery } from "../../../../../hooks/table/query/use-product-table-query"
-import { useDataTable } from "../../../../../hooks/use-data-table"
-import { productsLoader } from "../../loader"
-import { useFeatureFlag } from "../../../../../providers/feature-flag-provider"
-import { ConfigurableProductListTable } from "./configurable-product-list-table"
+import { HttpTypes } from "@medusajs/types";
+import { ActionMenu } from "../../../../../components/common/action-menu";
+import { _DataTable } from "../../../../../components/table/data-table";
+import { useDeleteProduct, useProducts } from "../../../../../hooks/api/products";
+import { useProductTableColumns } from "../../../../../hooks/table/columns/use-product-table-columns";
+import { useProductTableFilters } from "../../../../../hooks/table/filters/use-product-table-filters";
+import { useProductTableQuery } from "../../../../../hooks/table/query/use-product-table-query";
+import { useDataTable } from "../../../../../hooks/use-data-table";
+import { productsLoader } from "../../loader";
+import { useFeatureFlag } from "../../../../../providers/feature-flag-provider";
+import { ConfigurableProductListTable } from "./configurable-product-list-table";
 import { usePermission } from "../../../../../hooks/use-permission";
 import { useFormattedProducts } from "../../../../../hooks/api/sync-products";
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = 20;
 
 export const ProductListTable = () => {
   const { t } = useTranslation();
-  const location = useLocation();  const isViewConfigEnabled = useFeatureFlag("view_configurations")
-
-  // If feature flag is enabled, use the new configurable table
-  if (isViewConfigEnabled) {
-    return <ConfigurableProductListTable />
-  }
+  const location = useLocation();
+  const isViewConfigEnabled = useFeatureFlag("view_configurations");
 
   const initialData = useLoaderData() as Awaited<ReturnType<ReturnType<typeof productsLoader>>>;
 
@@ -60,13 +53,18 @@ export const ProductListTable = () => {
     getRowId: row => row.id,
   });
 
-  if (isError) {
-    throw error;
-  }
-
   const { hasPermission } = usePermission();
 
   const { mutate, isPending } = useFormattedProducts();
+
+  // If feature flag is enabled, use the new configurable table
+  if (isViewConfigEnabled) {
+    return <ConfigurableProductListTable />;
+  }
+
+  if (isError) {
+    throw error;
+  }
   const sync_access = hasPermission("/admin/products", "sync");
   const handleSyncToCMS = () => {
     mutate(undefined, {

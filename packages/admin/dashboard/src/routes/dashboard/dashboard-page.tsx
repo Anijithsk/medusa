@@ -1,5 +1,7 @@
-import { defineRouteConfig } from "@medusajs/admin-sdk";
 import { ChatBubbleLeftRight } from "@medusajs/icons";
+
+// Define route config helper locally
+const defineRouteConfig = (config: any) => config;
 import { Container } from "@medusajs/ui";
 import WelcomeSection from "../../components/dashboard/welcome-section";
 import MetricCards from "../../components/dashboard/metric-cards";

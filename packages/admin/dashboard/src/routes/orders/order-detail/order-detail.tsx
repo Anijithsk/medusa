@@ -2,7 +2,7 @@ import { useLoaderData, useParams } from "react-router-dom";
 import { TwoColumnPageSkeleton } from "../../../components/common/skeleton";
 import { TwoColumnPage } from "../../../components/layout/pages";
 import { useOrder, useOrderPreview } from "../../../hooks/api/orders";
-import { usePlugins } from "../../../hooks/api/plugins"
+import { usePlugins } from "../../../hooks/api/plugins";
 import { useExtension } from "../../../providers/extension-provider";
 import { ActiveOrderClaimSection } from "./components/active-order-claim-section";
 import { ActiveOrderExchangeSection } from "./components/active-order-exchange-section";
@@ -25,7 +25,7 @@ export const OrderDetail = () => {
 
   const { id } = useParams();
   const { getWidgets } = useExtension();
-  const { plugins = [] } = usePlugins()
+  const { plugins = [] } = usePlugins();
 
   const { order, isLoading, isError, error } = useOrder(
     id!,

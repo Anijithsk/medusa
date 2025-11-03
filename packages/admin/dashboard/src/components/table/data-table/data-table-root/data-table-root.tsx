@@ -259,12 +259,9 @@ export const DataTableRoot = <TData,>({
                               tabIndex={isTabableLink ? 0 : -1}
                             >
                               <div
-                                className={clx(
-                                  "flex size-full items-center pe-6",
-                                  {
-                                    "ps-6": isTabableLink && !hasLeftOffset,
-                                  }
-                                )}
+                                className={clx("flex size-full items-center pe-6", {
+                                  "ps-6": isTabableLink && !hasLeftOffset,
+                                })}
                               >
                                 {Inner}
                               </div>

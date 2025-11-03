@@ -33,17 +33,14 @@ import { RouteFocusModal, useRouteModal } from "../../../../../components/modals
 import { KeyboundForm } from "../../../../../components/utilities/keybound-form";
 import { useCampaigns } from "../../../../../hooks/api/campaigns";
 import { useCreatePromotion } from "../../../../../hooks/api/promotions";
-import {
-  currencies,
-  getCurrencySymbol,
-} from "../../../../../lib/data/currencies";
+import { currencies, getCurrencySymbol } from "../../../../../lib/data/currencies";
 import { DEFAULT_CAMPAIGN_VALUES } from "../../../../campaigns/common/constants";
 import { RulesFormField } from "../../../common/edit-rules/components/rules-form-field";
 import { AddCampaignPromotionFields } from "../../../promotion-add-campaign/components/add-campaign-promotion-form";
 import { Tab } from "./constants";
 import { CreatePromotionSchema } from "./form-schema";
 import { templates } from "./templates";
-import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction";
 
 const defaultValues = {
   campaign_id: undefined,
@@ -78,7 +75,7 @@ export const CreatePromotionForm = () => {
 
   const { t } = useTranslation();
   const { handleSuccess } = useRouteModal();
-  const direction = useDocumentDirection()
+  const direction = useDocumentDirection();
   const form = useForm<z.infer<typeof CreatePromotionSchema>>({
     defaultValues,
     resolver: zodResolver(CreatePromotionSchema),
@@ -135,10 +132,10 @@ export const CreatePromotionForm = () => {
       };
 
       if (data.campaign) {
-        data.campaign.budget.attribute = data.campaign.budget.attribute || null
+        data.campaign.budget.attribute = data.campaign.budget.attribute || null;
         data.campaign.budget.type = data.campaign.budget.attribute
           ? "use_by_attribute"
-          : data.campaign.budget.type
+          : data.campaign.budget.type;
       }
 
       createPromotion(
@@ -293,7 +290,7 @@ export const CreatePromotionForm = () => {
   });
 
   const isTypeStandard = watchType === "standard";
-  const isTypeBuyGet = watchType === "buyget"
+  const isTypeBuyGet = watchType === "buyget";
 
   const targetType = useWatch({
     control: form.control,
@@ -565,18 +562,14 @@ export const CreatePromotionForm = () => {
                     />
                   </div>
 
-                  {!currentTemplate?.hiddenFields?.includes(
-                    "is_tax_inclusive"
-                  ) && (
+                  {!currentTemplate?.hiddenFields?.includes("is_tax_inclusive") && (
                     <>
                       <Divider />
                       <div className="flex gap-x-2 gap-y-4">
                         <Form.Field
                           control={form.control}
                           name="is_tax_inclusive"
-                          render={({
-                            field: { onChange, value, ...field },
-                          }) => {
+                          render={({ field: { onChange, value, ...field } }) => {
                             return (
                               <Form.Item className="basis-full">
                                 <div className="flex items-center justify-between">
@@ -585,9 +578,7 @@ export const CreatePromotionForm = () => {
                                       {t("promotions.form.taxInclusive.title")}
                                     </Form.Label>
                                     <Form.Hint className="!mt-1">
-                                      {t(
-                                        "promotions.form.taxInclusive.description"
-                                      )}
+                                      {t("promotions.form.taxInclusive.description")}
                                     </Form.Hint>
                                   </div>
                                   <Form.Control className="mr-2 self-center">
@@ -602,7 +593,7 @@ export const CreatePromotionForm = () => {
                                 </div>
                                 <Form.ErrorMessage />
                               </Form.Item>
-                            )
+                            );
                           }}
                         />
                       </div>
@@ -650,9 +641,7 @@ export const CreatePromotionForm = () => {
 
                   <RulesFormField form={form} ruleType={"rules"} />
 
-                  {!currentTemplate?.hiddenFields?.includes(
-                    "application_method.type"
-                  ) && (
+                  {!currentTemplate?.hiddenFields?.includes("application_method.type") && (
                     <>
                       <Divider />
                       <Form.Field
@@ -661,9 +650,7 @@ export const CreatePromotionForm = () => {
                         render={({ field }) => {
                           return (
                             <Form.Item>
-                              <Form.Label>
-                                {t("promotions.fields.value_type")}
-                              </Form.Label>
+                              <Form.Label>{t("promotions.fields.value_type")}</Form.Label>
                               <Form.Control>
                                 <RadioGroup
                                   dir={direction}
@@ -673,20 +660,14 @@ export const CreatePromotionForm = () => {
                                 >
                                   <RadioGroup.ChoiceBox
                                     value={"fixed"}
-                                    label={t(
-                                      "promotions.form.value_type.fixed.title"
-                                    )}
-                                    description={t(
-                                      "promotions.form.value_type.fixed.description"
-                                    )}
+                                    label={t("promotions.form.value_type.fixed.title")}
+                                    description={t("promotions.form.value_type.fixed.description")}
                                     className={clx("basis-1/2")}
                                   />
 
                                   <RadioGroup.ChoiceBox
                                     value={"percentage"}
-                                    label={t(
-                                      "promotions.form.value_type.percentage.title"
-                                    )}
+                                    label={t("promotions.form.value_type.percentage.title")}
                                     description={t(
                                       "promotions.form.value_type.percentage.description"
                                     )}
@@ -696,15 +677,13 @@ export const CreatePromotionForm = () => {
                               </Form.Control>
                               <Form.ErrorMessage />
                             </Form.Item>
-                          )
+                          );
                         }}
                       />
                     </>
                   )}
 
-                  {!currentTemplate?.hiddenFields?.includes(
-                    "application_method.value"
-                  ) && (
+                  {!currentTemplate?.hiddenFields?.includes("application_method.value") && (
                     <>
                       <Divider />
                       <Form.Field
@@ -713,8 +692,7 @@ export const CreatePromotionForm = () => {
                         render={({ field: { onChange, value, ...field } }) => {
                           const currencyCode = form.getValues().application_method.currency_code;
 
-                          const currencyInfo =
-                            currencies[currencyCode?.toUpperCase() || "USD"]
+                          const currencyInfo = currencies[currencyCode?.toUpperCase() || "USD"];
 
                           return (
                             <Form.Item className="basis-1/2">
@@ -740,12 +718,8 @@ export const CreatePromotionForm = () => {
                                     onValueChange={(_value, _name, values) =>
                                       onChange(values?.value)
                                     }
-                                    decimalScale={
-                                      currencyInfo?.decimal_digits ?? 2
-                                    }
-                                    decimalsLimit={
-                                      currencyInfo?.decimal_digits ?? 2
-                                    }
+                                    decimalScale={currencyInfo?.decimal_digits ?? 2}
+                                    decimalsLimit={currencyInfo?.decimal_digits ?? 2}
                                     symbol={currencyCode ? getCurrencySymbol(currencyCode) : "$"}
                                     value={value}
                                     disabled={!currencyCode}
@@ -760,10 +734,8 @@ export const CreatePromotionForm = () => {
                                     value={value}
                                     onChange={e => {
                                       onChange(
-                                        e.target.value === ""
-                                          ? null
-                                          : parseFloat(e.target.value)
-                                      )
+                                        e.target.value === "" ? null : parseFloat(e.target.value)
+                                      );
                                     }}
                                   />
                                 )}
@@ -788,8 +760,7 @@ export const CreatePromotionForm = () => {
                   )}
 
                   {((isTypeStandard &&
-                    (watchAllocation === "each" ||
-                      watchAllocation === "once")) ||
+                    (watchAllocation === "each" || watchAllocation === "once")) ||
                     isTypeBuyGet) && (
                     <>
                       {isTypeBuyGet && (
@@ -838,9 +809,7 @@ export const CreatePromotionForm = () => {
                         render={({ field }) => {
                           return (
                             <Form.Item>
-                              <Form.Label
-                                tooltip={t("promotions.fields.allocationTooltip")}
-                              >
+                              <Form.Label tooltip={t("promotions.fields.allocationTooltip")}>
                                 {t("promotions.fields.allocation")}
                               </Form.Label>
 
@@ -856,12 +825,8 @@ export const CreatePromotionForm = () => {
                                   ) && (
                                     <RadioGroup.ChoiceBox
                                       value={"each"}
-                                      label={t(
-                                        "promotions.form.allocation.each.title"
-                                      )}
-                                      description={t(
-                                        "promotions.form.allocation.each.description"
-                                      )}
+                                      label={t("promotions.form.allocation.each.title")}
+                                      description={t("promotions.form.allocation.each.description")}
                                       className={clx("basis-1/3")}
                                     />
                                   )}
@@ -871,9 +836,7 @@ export const CreatePromotionForm = () => {
                                   ) && (
                                     <RadioGroup.ChoiceBox
                                       value={"across"}
-                                      label={t(
-                                        "promotions.form.allocation.across.title"
-                                      )}
+                                      label={t("promotions.form.allocation.across.title")}
                                       description={t(
                                         "promotions.form.allocation.across.description"
                                       )}
@@ -886,12 +849,8 @@ export const CreatePromotionForm = () => {
                                   ) && (
                                     <RadioGroup.ChoiceBox
                                       value={"once"}
-                                      label={t(
-                                        "promotions.form.allocation.once.title"
-                                      )}
-                                      description={t(
-                                        "promotions.form.allocation.once.description"
-                                      )}
+                                      label={t("promotions.form.allocation.once.title")}
+                                      description={t("promotions.form.allocation.once.description")}
                                       className={clx("basis-1/3")}
                                     />
                                   )}

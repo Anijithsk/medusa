@@ -33,7 +33,7 @@ import {
 import { queryClient } from "../../../../../lib/query-client";
 import { InventoryAvailabilityForm } from "./inventory-availability-form";
 import { CreateInventoryItemSchema } from "./schema";
-import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction";
 
 enum Tab {
   DETAILS = "details",
@@ -52,7 +52,7 @@ export function InventoryCreateForm({ locations }: InventoryCreateFormProps) {
   const { t } = useTranslation();
   const { handleSuccess } = useRouteModal();
   const [tab, setTab] = useState<Tab>(Tab.DETAILS);
-  const direction = useDocumentDirection()
+  const direction = useDocumentDirection();
   const form = useForm<CreateInventoryItemSchema>({
     defaultValues: {
       title: "",
@@ -196,12 +196,9 @@ export function InventoryCreateForm({ locations }: InventoryCreateFormProps) {
         dir={direction}
         value={tab}
         className="h-full"
-        onValueChange={(tab) => onTabChange(tab as Tab)}
+        onValueChange={tab => onTabChange(tab as Tab)}
       >
-        <KeyboundForm
-          className="flex h-full flex-col overflow-hidden"
-          onSubmit={handleSubmit}
-        >
+        <KeyboundForm className="flex h-full flex-col overflow-hidden" onSubmit={handleSubmit}>
           <RouteFocusModal.Header>
             <ProgressTabs.List className="border-ui-border-base -my-2 ml-2 min-w-0 flex-1 border-l">
               <ProgressTabs.Trigger

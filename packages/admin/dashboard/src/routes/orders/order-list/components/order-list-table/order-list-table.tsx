@@ -9,8 +9,8 @@ import { useOrderTableFilters } from "./use-order-table-filters";
 import { useOrderTableQuery } from "../../../../../hooks/table/query/use-order-table-query";
 import { useDataTable } from "../../../../../hooks/use-data-table";
 import { usePermission } from "../../../../../hooks/use-permission";
-import { useFeatureFlag } from "../../../../../providers/feature-flag-provider"
-import { ConfigurableOrderListTable } from "./configurable-order-list-table"
+import { useFeatureFlag } from "../../../../../providers/feature-flag-provider";
+import { ConfigurableOrderListTable } from "./configurable-order-list-table";
 
 import { DEFAULT_FIELDS } from "../../const";
 
@@ -18,12 +18,7 @@ const PAGE_SIZE = 20;
 
 export const OrderListTable = () => {
   const { t } = useTranslation();
-  const isViewConfigEnabled = useFeatureFlag("view_configurations")
-
-  // If feature flag is enabled, use the new configurable table
-  if (isViewConfigEnabled) {
-    return <ConfigurableOrderListTable />
-  }
+  const isViewConfigEnabled = useFeatureFlag("view_configurations");
 
   const { searchParams, raw } = useOrderTableQuery({
     pageSize: PAGE_SIZE,
@@ -50,6 +45,11 @@ export const OrderListTable = () => {
     count,
     pageSize: PAGE_SIZE,
   });
+
+  // If feature flag is enabled, use the new configurable table
+  if (isViewConfigEnabled) {
+    return <ConfigurableOrderListTable />;
+  }
 
   if (isError) {
     throw error;

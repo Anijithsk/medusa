@@ -1,27 +1,27 @@
-import React from "react"
-import { Heading, Input, Switch } from "@medusajs/ui"
-import { UseFormReturn, useWatch } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { z } from "zod"
+import React from "react";
+import { Heading, Input, Switch } from "@medusajs/ui";
+import { UseFormReturn, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
 
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from "@medusajs/types";
 
-import { Form } from "../../../../../components/common/form"
-import { Combobox } from "../../../../../components/inputs/combobox"
-import { CreateProductVariantSchema } from "./constants"
+import { Form } from "../../../../../components/common/form";
+import { Combobox } from "../../../../../components/inputs/combobox";
+import { CreateProductVariantSchema } from "./constants";
 
 type DetailsTabProps = {
-  product: HttpTypes.AdminProduct
-  form: UseFormReturn<z.infer<typeof CreateProductVariantSchema>>
-}
+  product: HttpTypes.AdminProduct;
+  form: UseFormReturn<z.infer<typeof CreateProductVariantSchema>>;
+};
 
 function DetailsTab({ form, product }: DetailsTabProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const manageInventoryEnabled = useWatch({
     control: form.control,
     name: "manage_inventory",
-  })
+  });
 
   return (
     <div className="flex flex-1 flex-col items-center overflow-y-auto">
@@ -41,7 +41,7 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
 
@@ -57,7 +57,7 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
 
@@ -73,8 +73,8 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                     <Form.Control>
                       <Combobox
                         value={value}
-                        onChange={(v) => {
-                          onChange(v)
+                        onChange={v => {
+                          onChange(v);
                         }}
                         {...field}
                         options={option.values.map((v: any) => ({
@@ -84,7 +84,7 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                       />
                     </Form.Control>
                   </Form.Item>
-                )
+                );
               }}
             />
           ))}
@@ -102,7 +102,7 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                         dir="ltr"
                         className="mt-[2px] rtl:rotate-180"
                         checked={value}
-                        onCheckedChange={(checked) => onChange(!!checked)}
+                        onCheckedChange={checked => onChange(!!checked)}
                         {...field}
                       />
                     </Form.Control>
@@ -111,14 +111,12 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                       <Form.Label>
                         {t("products.variant.inventory.manageInventoryLabel")}
                       </Form.Label>
-                      <Form.Hint>
-                        {t("products.variant.inventory.manageInventoryHint")}
-                      </Form.Hint>
+                      <Form.Hint>{t("products.variant.inventory.manageInventoryHint")}</Form.Hint>
                     </div>
                   </div>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
           <Form.Field
@@ -134,7 +132,7 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                         dir="ltr"
                         className="rtl:rotate-180"
                         checked={value}
-                        onCheckedChange={(checked) => onChange(!!checked)}
+                        onCheckedChange={checked => onChange(!!checked)}
                         {...field}
                         disabled={!manageInventoryEnabled}
                       />
@@ -143,14 +141,12 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                       <Form.Label>
                         {t("products.variant.inventory.allowBackordersLabel")}
                       </Form.Label>
-                      <Form.Hint>
-                        {t("products.variant.inventory.allowBackordersHint")}
-                      </Form.Hint>
+                      <Form.Hint>{t("products.variant.inventory.allowBackordersHint")}</Form.Hint>
                     </div>
                   </div>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
           <Form.Field
@@ -165,29 +161,25 @@ function DetailsTab({ form, product }: DetailsTabProps) {
                         dir="ltr"
                         className="rtl:rotate-180"
                         checked={value}
-                        onCheckedChange={(checked) => onChange(!!checked)}
+                        onCheckedChange={checked => onChange(!!checked)}
                         {...field}
                         disabled={!manageInventoryEnabled}
                       />
                     </Form.Control>
                     <div className="flex flex-col">
-                      <Form.Label>
-                        {t("products.variant.inventory.inventoryKit")}
-                      </Form.Label>
-                      <Form.Hint>
-                        {t("products.variant.inventory.inventoryKitHint")}
-                      </Form.Hint>
+                      <Form.Label>{t("products.variant.inventory.inventoryKit")}</Form.Label>
+                      <Form.Hint>{t("products.variant.inventory.inventoryKitHint")}</Form.Hint>
                     </div>
                   </div>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default DetailsTab
+export default DetailsTab;

@@ -5357,15 +5357,7 @@
           "additionalProperties": false
         }
       },
-      "required": [
-        "domain",
-        "subtitle",
-        "list",
-        "create",
-        "edit",
-        "delete",
-        "customers"
-      ],
+      "required": ["domain", "subtitle", "list", "create", "edit", "delete", "customers"],
       "additionalProperties": false
     },
     "orders": {
@@ -10022,12 +10014,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "title",
-                    "titleCustomerId",
-                    "titleEmail",
-                    "description"
-                  ],
+                  "required": ["title", "titleCustomerId", "titleEmail", "description"],
                   "additionalProperties": false
                 }
               },
@@ -10045,14 +10032,7 @@
               "additionalProperties": false
             }
           },
-          "required": [
-            "attribute",
-            "create",
-            "details",
-            "fields",
-            "type",
-            "edit"
-          ],
+          "required": ["attribute", "create", "details", "fields", "type", "edit"],
           "additionalProperties": false
         },
         "promotions": {
@@ -14173,13 +14153,7 @@
           "additionalProperties": false
         }
       },
-      "required": [
-        "save",
-        "saveAsNew",
-        "updateDefaultForEveryone",
-        "updateViewName",
-        "prompts"
-      ],
+      "required": ["save", "saveAsNew", "updateDefaultForEveryone", "updateViewName", "prompts"],
       "additionalProperties": false
     },
     "rbac": {

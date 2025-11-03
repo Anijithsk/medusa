@@ -23,7 +23,7 @@ import DetailsTab from "./details-tab";
 import InventoryKitTab from "./inventory-kit-tab";
 import PricingTab from "./pricing-tab";
 import { usePermission } from "../../../../../hooks/use-permission";
-import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction";
 
 enum Tab {
   DETAIL = "detail",
@@ -46,7 +46,7 @@ type CreateProductVariantFormProps = {
 export const CreateProductVariantForm = ({ product }: CreateProductVariantFormProps) => {
   const { t } = useTranslation();
   const { handleSuccess } = useRouteModal();
-  const direction = useDocumentDirection()
+  const direction = useDocumentDirection();
   const [tab, setTab] = useState<Tab>(Tab.DETAIL);
   const [tabState, setTabState] = useState<TabState>(initialTabState);
 
@@ -72,14 +72,12 @@ export const CreateProductVariantForm = ({ product }: CreateProductVariantFormPr
     }
 
     return regions.reduce(
-      
       (acc, reg) => {
-          acc[reg.id] = reg.currency_code;
-          return acc;
-        },
-     
+        acc[reg.id] = reg.currency_code;
+        return acc;
+      },
+
       {} as Record<string, string>
-    
     );
   }, [regions]);
 

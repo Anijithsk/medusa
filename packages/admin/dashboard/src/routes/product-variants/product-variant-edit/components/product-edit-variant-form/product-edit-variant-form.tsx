@@ -263,18 +263,16 @@ export const ProductEditVariantForm = ({ variant, product }: ProductEditVariantF
                             dir="ltr"
                             checked={value}
                             className="rtl:rotate-180"
-                            onCheckedChange={(checked) => onChange(!!checked)}
+                            onCheckedChange={checked => onChange(!!checked)}
                             {...field}
                           />
                         </Form.Control>
                       </div>
-                      <Form.Hint>
-                        {t("products.variant.inventory.manageInventoryHint")}
-                      </Form.Hint>
+                      <Form.Hint>{t("products.variant.inventory.manageInventoryHint")}</Form.Hint>
                     </div>
                     <Form.ErrorMessage />
                   </Form.Item>
-                )
+                );
               }}
             />
 
@@ -290,8 +288,8 @@ export const ProductEditVariantForm = ({ variant, product }: ProductEditVariantF
                       </Form.Label>
                       <Form.Control>
                         <Switch
-                            dir="ltr"
-                            className="rtl:rotate-180"
+                          dir="ltr"
+                          className="rtl:rotate-180"
                           checked={value}
                           onCheckedChange={checked => onChange(!!checked)}
                           {...field}

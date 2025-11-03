@@ -58,10 +58,10 @@ export const ProductGeneralSection = ({ product }: ProductGeneralSectionProps) =
       onSuccess: () => {
         navigate("..");
       },
-      onError: (e) => {
+      onError: e => {
         toast.error(t("products.toasts.delete.error.header"), {
           description: e.message,
-        })
+        });
       },
     });
   };

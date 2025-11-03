@@ -15,7 +15,7 @@ export * from "./notification";
 export * from "./orders";
 export * from "./payment-collections";
 export * from "./payments";
-export * from "./plugins"
+export * from "./plugins";
 export * from "./price-lists";
 export * from "./product-types";
 export * from "./product-variants";
@@ -26,7 +26,7 @@ export * from "./regions";
 export * from "./reservations";
 export * from "./sales-channels";
 export * from "./shipping-options";
-export * from "./shipping-option-types"
+export * from "./shipping-option-types";
 export * from "./shipping-profiles";
 export * from "./stock-locations";
 export * from "./store";
@@ -34,6 +34,6 @@ export * from "./tags";
 export * from "./tax-rates";
 export * from "./tax-regions";
 export * from "./users";
-export * from "./views"
+export * from "./views";
 export * from "./workflow-executions";
 export * from "./useAdminLogs";

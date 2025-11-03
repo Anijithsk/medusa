@@ -2,18 +2,18 @@ import { Heading, Input, Select, Text, Textarea } from "@medusajs/ui";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { Form } from "../../../../../components/common/form"
-import { HandleInput } from "../../../../../components/inputs/handle-input"
-import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
-import { CreateCategorySchema } from "./schema"
+import { Form } from "../../../../../components/common/form";
+import { HandleInput } from "../../../../../components/inputs/handle-input";
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction";
+import { CreateCategorySchema } from "./schema";
 
 type CreateCategoryDetailsProps = {
   form: UseFormReturn<CreateCategorySchema>;
 };
 
 export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
-  const { t } = useTranslation()
-  const direction = useDocumentDirection()
+  const { t } = useTranslation();
+  const direction = useDocumentDirection();
   return (
     <div className="flex flex-col items-center p-16">
       <div className="flex w-full max-w-[720px] flex-col gap-y-8">
@@ -81,11 +81,7 @@ export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
                 <Form.Item>
                   <Form.Label>{t("categories.fields.status.label")}</Form.Label>
                   <Form.Control>
-                    <Select
-                      dir={direction}
-                      {...field}
-                      onValueChange={onChange}
-                    >
+                    <Select dir={direction} {...field} onValueChange={onChange}>
                       <Select.Trigger ref={ref}>
                         <Select.Value />
                       </Select.Trigger>
@@ -112,11 +108,7 @@ export const CreateCategoryDetails = ({ form }: CreateCategoryDetailsProps) => {
                 <Form.Item>
                   <Form.Label>{t("categories.fields.visibility.label")}</Form.Label>
                   <Form.Control>
-                    <Select
-                      dir={direction}
-                      {...field}
-                      onValueChange={onChange}
-                    >
+                    <Select dir={direction} {...field} onValueChange={onChange}>
                       <Select.Trigger ref={ref}>
                         <Select.Value />
                       </Select.Trigger>

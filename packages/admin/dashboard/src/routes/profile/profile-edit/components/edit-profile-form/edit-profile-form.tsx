@@ -64,7 +64,7 @@ export const EditProfileForm = ({ user }: EditProfileProps) => {
       });
     }
   }, [user]);
-  const direction = useDocumentDirection()
+  const direction = useDocumentDirection();
   const form = useForm<zod.infer<typeof EditProfileSchema>>({
     defaultValues: {
       first_name: decryptedUser?.first_name ?? "",

@@ -1,5 +1,7 @@
-import { defineRouteConfig } from "@medusajs/admin-sdk";
 import { ChatBubbleLeftRight } from "@medusajs/icons";
+
+// Define route config helper locally
+const defineRouteConfig = (config: any) => config;
 import { Container, Heading, Input, Button, Text } from "@medusajs/ui";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
