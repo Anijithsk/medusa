@@ -1,26 +1,26 @@
-import { useLoaderData, useParams } from "react-router-dom"
+import { useLoaderData, useParams } from "react-router-dom";
 
-import { useProductVariant } from "../../../hooks/api/products"
+import { useProductVariant } from "../../../hooks/api/products";
+import { useVariantPreorder } from "../../../hooks/api/preorders";
 
-import { TwoColumnPageSkeleton } from "../../../components/common/skeleton"
-import { TwoColumnPage } from "../../../components/layout/pages"
-import { useExtension } from "../../../providers/extension-provider"
-import { VariantGeneralSection } from "./components/variant-general-section"
+import { TwoColumnPageSkeleton } from "../../../components/common/skeleton";
+import { TwoColumnPage } from "../../../components/layout/pages";
+import { useExtension } from "../../../providers/extension-provider";
+import { VariantGeneralSection } from "./components/variant-general-section";
 import {
   InventorySectionPlaceholder,
   VariantInventorySection,
-} from "./components/variant-inventory-section"
+} from "./components/variant-inventory-section";
 import { VariantMediaSection } from "./components/variant-media-section"
-import { VariantPricesSection } from "./components/variant-prices-section"
-import { VARIANT_DETAIL_FIELDS } from "./constants"
-import { variantLoader } from "./loader"
+import { VariantPricesSection } from "./components/variant-prices-section";
+import { VariantPreorderSection } from "./components/variant-preorder-section/variant-preorder-section";
+import { VARIANT_DETAIL_FIELDS } from "./constants";
+import { variantLoader } from "./loader";
 
 export const ProductVariantDetail = () => {
-  const initialData = useLoaderData() as Awaited<
-    ReturnType<typeof variantLoader>
-  >
+  const initialData = useLoaderData() as Awaited<ReturnType<typeof variantLoader>>;
 
-  const { id, variant_id } = useParams()
+  const { id, variant_id } = useParams();
   const { variant, isLoading, isError, error } = useProductVariant(
     id!,
     variant_id!,
@@ -28,25 +28,20 @@ export const ProductVariantDetail = () => {
     {
       initialData,
     }
-  )
+  );
+  console.log("variant", variant, variant_id);
+  const { data: preorderVariant } = useVariantPreorder(variant_id!);
 
-  const { getWidgets } = useExtension()
+  const { getWidgets } = useExtension();
 
   if (isLoading || !variant) {
-    return (
-      <TwoColumnPageSkeleton
-        mainSections={2}
-        sidebarSections={1}
-        showJSON
-        showMetadata
-      />
-    )
+    return <TwoColumnPageSkeleton mainSections={2} sidebarSections={1} showJSON showMetadata />;
   }
 
   if (isError) {
-    throw error
+    throw error;
   }
-
+  console.log("preorderVariant", preorderVariant);
   return (
     <TwoColumnPage
       data={variant}
@@ -63,16 +58,17 @@ export const ProductVariantDetail = () => {
       <TwoColumnPage.Main>
         <VariantGeneralSection variant={variant} />
         <VariantMediaSection variant={variant} />
+        <VariantPreorderSection variant={variant} preorderVariant={preorderVariant} />
         {!variant.manage_inventory ? (
           <InventorySectionPlaceholder />
         ) : (
           <VariantInventorySection
-            inventoryItems={variant.inventory_items.map((i) => {
+            inventoryItems={variant?.inventory_items?.map(i => {
               return {
                 ...i.inventory,
-                required_quantity: i.required_quantity,
+                required_quantity: i?.required_quantity,
                 variant,
-              }
+              };
             })}
           />
         )}
@@ -81,5 +77,5 @@ export const ProductVariantDetail = () => {
         <VariantPricesSection variant={variant} />
       </TwoColumnPage.Sidebar>
     </TwoColumnPage>
-  )
-}
+  );
+};
