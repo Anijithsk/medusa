@@ -24,7 +24,7 @@ import { useDataTableDateFilters } from "../../../../../components/data-table/he
 import { useDeleteVariantLazy, useProductVariants } from "../../../../../hooks/api/products";
 import { useQueryParams } from "../../../../../hooks/use-query-params";
 import { PRODUCT_VARIANT_IDS_KEY } from "../../../common/constants";
-import { Thumbnail } from "../../../../../components/common/thumbnail"
+import { Thumbnail } from "../../../../../components/common/thumbnail";
 import { usePermission } from "../../../../../hooks/use-permission";
 
 type ProductVariantSectionProps = {
@@ -349,7 +349,7 @@ const useColumns = (
             <div className="flex items-center pl-[1px]">
               <Thumbnail src={row.original.thumbnail} />
             </div>
-          )
+          );
         },
       }),
       columnHelper.accessor("title", {
@@ -392,7 +392,7 @@ const useColumns = (
         actions: getActions,
       }),
     ];
-  }, [t, optionColumns, dateColumns, getActions, getInventory]);
+  }, [t, optionColumns, getActions, getInventory]);
 };
 
 const filterHelper = createDataTableFilterHelper<HttpTypes.AdminProductVariant>();
